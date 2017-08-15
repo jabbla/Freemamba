@@ -7,6 +7,9 @@ function Freelist(config){
     /**配置数据模型 */
     Freelist.config(config, this);
 
+    /**执行config */
+    typeof this.config === 'function' && this.config(this.data);
+
     /**解析字符串--->AST树 */
     this.AST = Freelist.parse(tpl)
     
@@ -29,6 +32,9 @@ Freelist.config = function(config, context){
     }
     /**设置列表 */
     context._list = {};
+
+    /**设置默认data */
+    context.data = config.data || {};
 }
 
 Freelist.compiler = {
@@ -46,10 +52,11 @@ Freelist.compiler = {
         }
 
         /**处理子节点 */
-        var result = [];
-        for(var j=0;j<ast.children.length;j++){
-            var child = ast.children[j];
-            node.append(context._compile(child, listInfo));
+        if(ast.children){
+            for(var j=0;j<ast.children.length;j++){
+                var child = ast.children[j];
+                node.append(context._compile(child, listInfo));
+            }
         }
 
         return node;
@@ -155,6 +162,10 @@ Freelist.prototype.$modify = function(index, model){
         _listContainer = _list.container,
         _body = _list.body;
 
+    /**设置数据模型 */
+    _list.data[index] = model;
+
+    /**Dom精确更新 */
     var targetDom = _listContainer.children[index];
     var node = this._compile(_body, {item: model, item_index: index});
 
@@ -166,19 +177,20 @@ Freelist.prototype.$insert = function(index, model){
         _listContainer = _list.container,
         _body = _list.body;
 
-    var targetDom = _listContainer.children[index];
-    var node = this._compile(_body, {item: model, item_index: index});
+    /**设置数据模型 */
+    _list.data.splice(index, 0, model);
 
-    _listContainer.insertBefore(node, targetDom);
+    this.$render();
 }
 
 Freelist.prototype.$delete = function(index){
      var _list = this._list,
         _listContainer = _list.container;
 
-    var targetDom = _listContainer.children[index];
+    /**设置数据模型 */
+    _list.data.splice(index, 1);
 
-    _listContainer.removeChild(targetDom);
+    this.$render();
 }
 
 Freelist.prototype.$render = function(useWorker){

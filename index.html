@@ -8,17 +8,19 @@
 </head>
 <body>
     <div id="container"></div>
-    <div id="text">
+    <script id="text" type="text/html">
         <div class="wraper">
-            <div class="test test1" data-index={user.index} list-container>
-                Hello，{user.name}
+            <h2>{title}</h2>
+            <h3>Hello,{user.name}</h3>
+            <input type="text" /> <button on-click={this.addTask($event)}>添加</button>
+            <ul class="test test1" data-index={user.index} list-container>
                 {#list array as option}
-                    <li on-click={this.test(option,option_index)}>{option.name}{option_index}</li>
+                    <li>{option.name} <button on-click={this.deleteTask(option_index)}>删除</button></li>
                 {/list}
-            </div>
-            <button on-click={this.render($event)}>重新渲染</button>
+            </ul>
+            <button on-click={this.render($event)}>渲染</button>
         </div>
-    </div>
+    </script>
     <script src="./dist/FreeList.min.js"></script>
     <script src="./test.js"></script>
 </body>
