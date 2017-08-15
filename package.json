@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "babili-webpack-plugin": "^0.1.2",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "webpack": "^3.5.4"
+  },
+  "dependencies": {
+    "art-template": "^4.12.1"
+  }
+}

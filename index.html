@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Worker-List</title>
+</head>
+<body>
+    <div id="container"></div>
+    <div id="text">
+        <div class="wraper">
+            <div class="test test1" data-index={user.index} list-container>
+                Hello，{user.name}
+                {#list array as option}
+                    <li on-click={this.test(option,option_index)}>{option.name}{option_index}</li>
+                {/list}
+            </div>
+            <button on-click={this.render($event)}>重新渲染</button>
+        </div>
+    </div>
+    <script src="./dist/FreeList.min.js"></script>
+    <script src="./test.js"></script>
+</body>
+</html>
