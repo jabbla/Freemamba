@@ -10,7 +10,8 @@ module.exports = {
     },
     devtool: 'inline-source-map',
     devServer: {
-        contentBase: './'
+        contentBase: './',
+        hot: true
     },
     plugins: [
         //new BabiliPlugin({}, {test: /\.js($|\?)/i}),

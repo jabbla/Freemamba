@@ -30,6 +30,9 @@ Freelist.config = function(config, context){
 
     /**设置默认data */
     context.data = config.data || {};
+
+    /**保存设置 */
+    context.define = config;
 }
 
 Freelist.compiler = {
@@ -215,11 +218,24 @@ Freelist.prototype._renderAsync = function(messageBus){
     var data = this.data,
         ast = this.AST;
 
-    messageBus.receive({type: 'render', data: {ast: ast, data: data}})
+    
+    messageBus.receive({type: 'render', data: {ast: ast, data: data, events: Freelist.cloneEvents(this)}})
         .then(function(htmlStr){
-            console.log('worker渲染完毕');
+            this.containerNode.innerHTML = htmlStr;
             console.log(htmlStr);
-        });
+        }.bind(this));
+}
+
+Freelist.cloneEvents = function(freelist){
+    var result = {}, define = freelist.define;
+
+    for(var str in define){
+       if(typeof define[str] === 'function'){
+           result[str] = define[str]+'';
+       }
+    }
+
+    return result;
 }
 
 Freelist.prototype._sg_ = function(path, data){

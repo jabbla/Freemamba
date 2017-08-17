@@ -13,7 +13,7 @@
             <h2>{title}</h2>
             <h3>Hello,{user.name}</h3>
             <input type="text" value={inputText} on-input={this.onInput($event)}/> <button on-click={this.addTask($event)}>添加</button><button on-click={this.onReset($event)}>清空</button>
-            <ul class="test test1" data-index={user.index} list-container>
+            <ul class="test test1" list-container>
                 {#list array as option}
                     <li>{option.name} <button on-click={this.deleteTask(option_index)}>删除</button></li>
                 {/list}

@@ -1,7 +1,7 @@
 var tpl = document.getElementById('text').innerHTML;
 
 var workerText = encodeURIComponent(document.getElementById('worker').innerHTML);
-var myWorker = new Worker('data:text/javascript,'+workerText);
+var myWorker = new Worker('./src/MessageBus/MessageBus_worker.js');
 
 var myMsgBus = new MessageBus(myWorker);
 
@@ -47,6 +47,9 @@ var myList = new Freelist({
         this.$insert(array.length, {name: inputText});
     },
     render: function(){
+        var data = this.data;
+
+        this.data.array = [];
         this.$render(myMsgBus);
     }
 });

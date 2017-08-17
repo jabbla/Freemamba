@@ -144,6 +144,10 @@ var MessageBS, RenderSt, document, documentFg, Elementt;
             }
 
             Element.prototype.setAttribute = function(attrName, attrValue){
+                var eventPattern = /on-/;
+
+                if(eventPattern.test(attrName)) return;
+
                 this._attrs.push({name: attrName, value: attrValue});
             };
 
@@ -163,6 +167,8 @@ var MessageBS, RenderSt, document, documentFg, Elementt;
             function RenderStore(obj){
                 this.ast = obj.ast;
                 this.data = obj.data;
+                this.mergeEvents(obj.events);
+                console.log(this);
                 this._list = {};
             }
 
@@ -174,6 +180,13 @@ var MessageBS, RenderSt, document, documentFg, Elementt;
                 this._typedFlater = RenderStore.typedFlater;
                 this.vDom = this._compile(ast, data);
                 this.renderedStr = this.flatToString(this.vDom._children);
+            }
+
+            RenderStore.prototype.mergeEvents = function(events){
+                for(var str in events){
+                    console.log(events, str);
+                    this[str] = new Function('', 'return '+events[str]+'.apply(this, [].slice.call(arguments))');
+                }
             }
 
             RenderStore.compiler = {
@@ -322,6 +335,7 @@ var MessageBS, RenderSt, document, documentFg, Elementt;
                 if(node instanceof documentFg){
                     return body;
                 }
+
                 /**生成属性字符串 */
                 for(var j=0;j<attrs.length;j++){
                     attrStr += (attrs[j].name+'="'+attrs[j].value+'" ');
@@ -329,10 +343,10 @@ var MessageBS, RenderSt, document, documentFg, Elementt;
 
                 /**生成事件字符串 */
                 for(var k=0;k<events.length;k++){
-                    eventStr += ('on'+events[k].name+'='+'"'+events[k].value+'" ');
+                    eventStr += ('on'+events[k].name+'='+'"('+events[k].value+')()" ');
                 }
 
-                return '<'+tagName+' '+attrStr+eventStr+'>'+body+'<'+tagName+'/>';
+                return '<'+tagName+' '+attrStr+eventStr+'>'+body+'</'+tagName+'>';
             }   
 
             RenderStore.prototype._sg_ = function(path, data){
@@ -354,9 +368,7 @@ var MessageBS, RenderSt, document, documentFg, Elementt;
             messageBus.addEvent('render', function(data){
                 var rd = new RenderSt(data);
                 rd.render();
-                console.log(rd.vDom);
-                console.log(rd.renderedStr);
-                this.receive({type: 'render', data: '<div></div>'});
+                this.receive({type: 'render', data: rd.renderedStr});
             });
 
         })();

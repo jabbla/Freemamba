@@ -62,7 +62,7 @@ MessageBus.prototype._checkWatchers = function(watchers, Info){
     
     for(var i=0, watcher;i<watchers.length;i++){
         watcher = watchers[i];
-        watcher.call(this, Info);
+        watcher(Info);
     }
 }
 
@@ -96,7 +96,7 @@ MessageBus.prototype._emit = function(eventName, data){
 MessageBus.prototype._executeWatchers = function(watchers, data){
     for(var i=0, watcher;i<watchers.length;i++){
         watcher = watchers[i];
-        watcher.call(this, data);
+        watcher(data);
     }
 }
 
