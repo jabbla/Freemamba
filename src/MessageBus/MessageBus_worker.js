@@ -1,28 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Freelist-todo</title>
-</head>
-<body>
-    <div id="container"></div>
-    <script id="text" type="text/html">
-        <div class="wraper">
-            <h2>{title}</h2>
-            <h3>Hello,{user.name}</h3>
-            <input type="text" value={inputText} on-input={this.onInput($event)}/> <button on-click={this.addTask($event)}>添加</button><button on-click={this.onReset($event)}>清空</button>
-            <ul class="test test1" data-index={user.index} list-container>
-                {#list array as option}
-                    <li>{option.name} <button on-click={this.deleteTask(option_index)}>删除</button></li>
-                {/list}
-            </ul>
-            <button on-click={this.render($event)}>渲染</button>
-        </div>
-    </script>
-    <script id="worker" type="text/plain">
-        var MessageBS, RenderSt, document, documentFg, Elementt;
+var MessageBS, RenderSt, document, documentFg, Elementt;
 
         /*MessageBus类*/
         !(function(){
@@ -335,10 +311,3 @@
             });
 
         })();
-    </script>
-    <script src="./dist/FreeList.min.js"></script>
-    <script src="./src/MessageBus/MessageBus.js"></script>
-    <script src="./test.js"></script>
-    <script src="./test.worker.js"></script>
-</body>
-</html>

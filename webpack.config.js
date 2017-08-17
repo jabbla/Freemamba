@@ -8,6 +8,10 @@ module.exports = {
         filename: 'FreeList.min.js',
         path: path.resolve(__dirname, './dist/')
     },
+    devtool: 'inline-source-map',
+    devServer: {
+        contentBase: './'
+    },
     plugins: [
         //new BabiliPlugin({}, {test: /\.js($|\?)/i}),
         //new UglifyJSPlugin()

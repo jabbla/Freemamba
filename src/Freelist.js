@@ -13,11 +13,6 @@ function Freelist(config){
     /**解析字符串--->AST树 */
     this.AST = Freelist.parse(tpl)
     
-    /**获得编译器 */
-    this._compiler = Freelist.compiler;
-
-    /**编译AST树--->DOM树 */
-    this.domTree = this._compile(this.AST);
 }
 
 Freelist.parse = function(str){
@@ -152,8 +147,8 @@ Freelist.prototype._compile = function(ast, listInfo){
 
 Freelist.prototype.$inject = function(node){
     this.containerNode = node;
-    /**标记根节点 */
-    this.rootNode = this.domTree.children[0];
+
+    this.$render()
     node.append(this.domTree);
 }
 
@@ -189,17 +184,42 @@ Freelist.prototype.$delete = function(index){
 
     /**设置数据模型 */
     _list.data.splice(index, 1);
-
     this.$render();
 }
 
-Freelist.prototype.$render = function(useWorker){
-    var rootNode = this.rootNode,
+Freelist.prototype.$render = function(messageBus){
+    if(messageBus){
+        this._renderAsync(messageBus);
+    }else{
+        this._renderSync();
+    }
+}
+
+Freelist.prototype._renderSync = function(){
+    /**获得编译器 */
+    this._compiler = Freelist.compiler;
+
+    /**编译AST树--->DOM树 */
+    var newRoot = this.domTree = this._compile(this.AST),
         containerNode = this.containerNode,
-        newRoot = this._compile(this.AST).children[0];
+        rootNode = this.rootNode;
+
     
-    containerNode.replaceChild(newRoot, rootNode);
-    this.rootNode = newRoot;
+    this.rootNode = newRoot.children[0];
+    if(rootNode){
+        containerNode.replaceChild(newRoot, rootNode);
+    }
+}
+
+Freelist.prototype._renderAsync = function(messageBus){
+    var data = this.data,
+        ast = this.AST;
+
+    messageBus.receive({type: 'render', data: {ast: ast, data: data}})
+        .then(function(htmlStr){
+            console.log('worker渲染完毕');
+            console.log(htmlStr);
+        });
 }
 
 Freelist.prototype._sg_ = function(path, data){
