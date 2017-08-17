@@ -149,10 +149,10 @@
             documentFg = documentFragment;
 
             function documentFragment(){
-                this._container = [];
+                this._children = [];
             }
             documentFragment.prototype.append = function(node){
-                this._container.push(node);
+                this._children.push(node);
             };
         })();
 
@@ -195,7 +195,9 @@
                     data = this.data;
                 
                 this._compiler = RenderStore.compiler;
+                this._typedFlater = RenderStore.typedFlater;
                 this.vDom = this._compile(ast, data);
+                this.renderedStr = this.flatToString(this.vDom._children);
             }
 
             RenderStore.compiler = {
@@ -306,10 +308,56 @@
                     }
                     return node;
                 }else{
-                    console.log(this);
                     return this._compiler[ast.type](ast, this, listInfo);
                 }
             }
+
+            RenderStore.prototype.flatToString = function(node){
+                if(node instanceof Array){
+                    var result = '';
+                    for(var i=0;i<node.length;i++){
+                        result += this.flatToString(node[i]);
+                    }
+                    return result;
+                }else{
+                    return this.flatNode(node);
+                }
+                
+            }
+
+            RenderStore.prototype.flatNode = function(node){
+                var tagName = node._tagName,
+                    attrs = node._attrs,
+                    events = node._events,
+                    children = node._children,
+                    body = '', attrStr = '', eventStr = '';
+                
+                /**文本节点处理 */
+                if(typeof node === 'string'){
+                    return node;
+                }
+
+                /**插入子节点 */
+                for(var i=0;i<children.length;i++){
+                    body += this.flatNode(children[i]);
+                }
+
+                /**fragMent */
+                if(node instanceof documentFg){
+                    return body;
+                }
+                /**生成属性字符串 */
+                for(var j=0;j<attrs.length;j++){
+                    attrStr += (attrs[j].name+'="'+attrs[j].value+'" ');
+                }
+
+                /**生成事件字符串 */
+                for(var k=0;k<events.length;k++){
+                    eventStr += ('on'+events[k].name+'='+'"'+events[k].value+'" ');
+                }
+
+                return '<'+tagName+' '+attrStr+eventStr+'>'+body+'<'+tagName+'/>';
+            }   
 
             RenderStore.prototype._sg_ = function(path, data){
                 var result;
@@ -331,6 +379,7 @@
                 var rd = new RenderSt(data);
                 rd.render();
                 console.log(rd.vDom);
+                console.log(rd.renderedStr);
                 this.receive({type: 'render', data: '<div></div>'});
             });
 
