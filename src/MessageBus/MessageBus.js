@@ -1,6 +1,7 @@
 function MessageBus(worker){
     this._worker = worker;
     this._onSendWorker = [];
+    this._connectionCenter = {};
     this._initWorker();
     this._createEventsStore();
 }
@@ -94,9 +95,10 @@ MessageBus.prototype._emit = function(eventName, data){
 }
 
 MessageBus.prototype._executeWatchers = function(watchers, data){
-    for(var i=0, watcher;i<watchers.length;i++){
+    for(var i=watchers.length-1, watcher;i>=0;i--){
         watcher = watchers[i];
         watcher(data);
+        watchers.splice(i, 1);
     }
 }
 

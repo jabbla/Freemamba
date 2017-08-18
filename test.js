@@ -1,7 +1,6 @@
 var tpl = document.getElementById('text').innerHTML;
 
-var workerText = encodeURIComponent(document.getElementById('worker').innerHTML);
-var myWorker = new Worker('./src/MessageBus/MessageBus_worker.js');
+var myWorker = new Worker('./dist/Worker.js');
 
 var myMsgBus = new MessageBus(myWorker);
 
@@ -21,9 +20,6 @@ var myList = new Freelist({
             ],
             inputText: ''
         });
-    },
-    test: function(e){
-        console.log(e);
     },
     onInput: function($event){
         var data = this.data;
@@ -49,7 +45,7 @@ var myList = new Freelist({
     render: function(){
         var data = this.data;
 
-        this.data.array = [];
+        this.$replace([{name: '朱潇然'}]);
         this.$render(myMsgBus);
     }
 });

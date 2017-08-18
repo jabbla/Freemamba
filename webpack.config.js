@@ -3,9 +3,12 @@ const BabiliPlugin = require("babili-webpack-plugin");
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: {
+        'Freelist': ['./src/index.js'],
+        'Worker': ['./src/worker_index.js']
+    },
     output: {
-        filename: 'FreeList.min.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, './dist/')
     },
     devtool: 'inline-source-map',
