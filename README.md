@@ -1,4 +1,4 @@
-# Freelist
+# Freemamba
 
 
 ---
@@ -7,7 +7,7 @@
 
 业务中碰到有4000个左右下拉选项的需求，使用Regular会造成页面卡顿，大部分时间都花费在`this._digest()`方法上，起初想把regular的脏检查放在web worker中，但是修改源码并不是一个很好的解决方案，牵扯的东西太多。
 
-于是，Freelist诞生了，目前还是一个比较初级的框架，跟React很像，语法类似Regular。
+于是，Freemamba诞生了，目前还是一个比较初级的框架，跟React很像，语法类似Regular。
 
 ## 实现的特性
 1. 渲染模式（除2.中方法外，可手动控制渲染）：同步渲染 、Web Worker渲染
@@ -18,17 +18,19 @@
 6. MessageBus: 负责主线程和Worker的消息分发
 
 ## 计划拓展功能
-1. Worker中diff探查
-2. MessageBus连接池
-3. 自定义组件
-4. 多列表以及列表嵌套
-5. 条件渲染和computed属性
+1. 条件渲染和computed属性
+2. 多列表以及列表嵌套
+3. Worker中diff探查
+4. MessageBus连接池
+5. 自定义组件
+
+
 
 ## 使用说明
-### /dist/Freelist.js
+### /dist/Freemamba.js
 Nej直接
 
-## Freelist API说明
+## Freemamba API说明
 ### 列表容器标识
 > 在模板中的列表项容器元素的属性中添加``list-container``
 
@@ -138,11 +140,11 @@ var tpl = document.getElementById('text').innerHTML;
 var myWorker = new Worker('./dist/Worker.js');
 var myMsgBus = new MessageBus(myWorker);
 
-var myList = new Freelist({
+var myList = new Freemamba({
     template: tpl,
     config: function(data){
         Object.assign(data, {
-            title: 'Freelist todoList',
+            title: 'Freemamba todoList',
             user: {
                 name: 'jabbla'
             },

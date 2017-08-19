@@ -1,11 +1,11 @@
-var Freelist = require('./store/UIRenderStore.js');
+var Freemamba = require('./store/UIRenderStore.js');
 var MessageBus = require('./messageBus/MessageBus.js');
 
 (function(root){
     if(root.NEJ && NEJ.define){
         NEJ.define([], function(){
             return {
-                Freelist: Freelist,
+                Freemamba: Freemamba,
                 MessageBus: MessageBus
             };
         });
@@ -15,7 +15,7 @@ var MessageBus = require('./messageBus/MessageBus.js');
     if(window && window.define){
         window.define([], function(){
             return {
-                Freelist: Freelist,
+                Freemamba: Freemamba,
                 MessageBus: MessageBus
             };
         });
@@ -23,15 +23,15 @@ var MessageBus = require('./messageBus/MessageBus.js');
     }
 
     if(document && document.nodeType){
-        window.Freelist = {
-            Freelist: Freelist,
+        window.Freemamba = {
+            Freemamba: Freemamba,
             MessageBus: MessageBus
         };
     }
 
     if(module && module.exports){
         module.exports = {
-            Freelist: Freelist,
+            Freemamba: Freemamba,
             MessageBus: MessageBus
         };
     }

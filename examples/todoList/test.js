@@ -1,12 +1,12 @@
-var Message = Freelist.MessageBus;
-var freelist = Freelist.Freelist;
+var Message = Freemamba.MessageBus;
+var freemamba = Freemamba.Freemamba;
 
 var myWorker = new Worker('../../dist/Worker.js');
 var tpl = document.getElementById('text').innerHTML;
 
 var myMsgBus = new MessageBus(myWorker);
 
-var myList = new freelist({
+var myList = new freemamba({
     template: tpl,
     config: function(data){
         Object.assign(data, {

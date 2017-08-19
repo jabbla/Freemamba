@@ -1,3 +1,3 @@
-var Freelist = require('./dist/Freelist.js');
+var Freemamba = require('./dist/Freemamba.js');
 
-module.exports = Freelist;
+module.exports = Freemamba;
