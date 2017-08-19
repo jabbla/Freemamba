@@ -1,3 +1,3 @@
 var Freelist = require('./dist/Freelist.js');
 
-module.exports = Freelist;
+module.exports = Freelis;
