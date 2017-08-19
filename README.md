@@ -25,6 +25,8 @@
 5. 条件渲染和computed属性
 
 ## 使用说明
+### /dist/Freelist.js
+Nej直接
 
 ## Freelist API说明
 ### 列表容器标识
@@ -67,7 +69,7 @@ this.$replace(newArray)
 
 ```js
 this.$render()          //同步渲染
-this.$render(true)      //worker渲染
+this.$render(msgBug)      //worker渲染，传入MessageBus实例
 ```
 
 ## MessageBus API说明
@@ -133,6 +135,9 @@ myMsgBus.onSend(fn);        //注册MessageBus的消息发送事件
 ### 创建实例
 ```js
 var tpl = document.getElementById('text').innerHTML;
+var myWorker = new Worker('./dist/Worker.js');
+var myMsgBus = new MessageBus(myWorker);
+
 var myList = new Freelist({
     template: tpl,
     config: function(data){

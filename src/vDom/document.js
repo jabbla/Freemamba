@@ -1,4 +1,4 @@
-var documentFragment = require('./documentFragment.js');
+var documentFragment = require('./DocumentFragment.js');
 var Element = require('./Element.js');
 
 var proto = {

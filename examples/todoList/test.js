@@ -1,10 +1,12 @@
-var tpl = document.getElementById('text').innerHTML;
+var Message = Freelist.MessageBus;
+var freelist = Freelist.Freelist;
 
-var myWorker = new Worker('./dist/Worker.js');
+var myWorker = new Worker('../../dist/Worker.js');
+var tpl = document.getElementById('text').innerHTML;
 
 var myMsgBus = new MessageBus(myWorker);
 
-var myList = new Freelist({
+var myList = new freelist({
     template: tpl,
     config: function(data){
         Object.assign(data, {
@@ -13,10 +15,9 @@ var myList = new Freelist({
                 name: 'zhuxiaoran'
             },
             array: [
-                {name: 'Worker渲染'},
-                {name: 'Computed属性实现'},
-                {name: '完善文档'},
-                {name: 'Worker中diff且render'}
+                {name: 'test1'},
+                {name: 'test2'},
+                {name: 'test3'}
             ],
             inputText: ''
         });

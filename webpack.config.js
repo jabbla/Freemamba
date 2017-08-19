@@ -4,8 +4,8 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     entry: {
-        'Freelist': ['./src/index.js'],
-        'Worker': ['./src/worker_index.js']
+        'Freelist': ['./src/ui_index.js'],
+        'Worker': ['./src/wk_index.js']
     },
     output: {
         filename: '[name].js',
