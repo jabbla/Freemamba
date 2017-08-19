@@ -1,10 +1,16 @@
-var document = require('../vdom/Document.js');
-var documentFragment = require('../vdom/DocumentFragment.js');
-var Element = require('../vdom/Element.js');
+/*
+ * @Author: zhuxiaoran 
+ * @Date: 2017-08-19 19:48:44 
+ * @Last Modified by: zhuxiaoran
+ * @Last Modified time: 2017-08-19 20:00:12
+ */
 
 var BaseRenderStore = require('./BaseRenderStore.js');
 var Extend = require('../utils/extend.js');
 var Compiler = require('../compiler/workerThread/compiler.js');
+
+var documentFragment = require('../vdom/DocumentFragment.js');
+var Element = require('../vdom/DocumentFragment.js');
 
 function RenderStore(obj){
     this.super(obj);

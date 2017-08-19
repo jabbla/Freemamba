@@ -1,3 +1,10 @@
+/*
+ * @Author: zhuxiaoran 
+ * @Date: 2017-08-19 19:48:21 
+ * @Last Modified by:   zhuxiaoran 
+ * @Last Modified time: 2017-08-19 19:48:21 
+ */
+
 var Extend = require('../utils/extend.js');
 var BaseRenderStore = require('./BaseRenderStore.js');
 var Compiler = require('../compiler/mainThread/compiler.js');

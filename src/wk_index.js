@@ -1,4 +1,11 @@
-var MessageBus = require('./messageBus/MessageBus_worker.js');
+/*
+ * @Author: zhuxiaoran 
+ * @Date: 2017-08-19 19:49:03 
+ * @Last Modified by: zhuxiaoran
+ * @Last Modified time: 2017-08-19 20:11:20
+ */
+
+var MessageBus = require('./messageBus/WorkerMsgBus.js');
 var WKRenderStore = require('./store/WKRenderStore.js');
 
 var myMessageBus = new MessageBus();

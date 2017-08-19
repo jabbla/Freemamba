@@ -1,7 +1,11 @@
-function MessageBus(worker){
-    this._worker = worker;
+/*
+ * @Author: zhuxiaoran 
+ * @Date: 2017-08-19 19:51:53 
+ * @Last Modified by: zhuxiaoran
+ * @Last Modified time: 2017-08-19 20:13:39
+ */
+function MessageBus(){
     this._onSendWorker = [];
-    this._connectionCenter = {};
     this._initWorker();
     this._createEventsStore();
 }
@@ -11,12 +15,9 @@ MessageBus.prototype._createEventsStore = function(){
 }
 
 MessageBus.prototype._initWorker = function(){
-    var _worker = this._worker;
-
-    _worker.addEventListener('message', this._onWorkerMessage.bind(this));
 }
 
-MessageBus.prototype._onWorkerMessage = function(message){
+MessageBus.prototype._onMessage = function(message){
 
     this._deserialize(message);
 }
@@ -52,11 +53,14 @@ MessageBus.prototype._sendInfoToWorker = function(Info){
     var _worker = this._worker,
         _onSendWorker = this._onSendWorker;
 
-    _worker.postMessage(Info);
+    this._postMessage(Info);
 
     setTimeout(function(){
         if(_onSendWorker.length) this._checkWatchers(_onSendWorker, Info);
     }.bind(this), 0);
+}
+
+MessageBus.prototype._postMessage = function(Info){
 }
 
 MessageBus.prototype._checkWatchers = function(watchers, Info){
@@ -102,4 +106,4 @@ MessageBus.prototype._executeWatchers = function(watchers, data){
     }
 }
 
-window.MessageBus = MessageBus;
+module.exports = MessageBus;

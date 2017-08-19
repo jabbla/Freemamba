@@ -1,4 +1,4 @@
-var Message = Freemamba.MessageBus;
+var MessageBus = Freemamba.MessageBus;
 var freemamba = Freemamba.Freemamba;
 
 var myWorker = new Worker('../../dist/Worker.js');
