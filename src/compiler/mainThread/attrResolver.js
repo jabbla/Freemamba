@@ -2,8 +2,10 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 16:51:33 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 17:28:02
+ * @Last Modified time: 2017-08-21 01:47:27
  */
+var List = require('../../list/List.js');
+
 function resolveAttribute(attr, node, context, listInfo) {
     var valueType = typeof attr.value;
     switch (valueType) {
@@ -14,8 +16,9 @@ function resolveAttribute(attr, node, context, listInfo) {
         default:
     }
 
-    if (attr.name === 'list') {
-        context._list.container = node;
+    if (attr.name === 'list' && attr.value) {
+        /**创建List实例 */
+        context._listBuffer = context.$list[attr.value] = new List({data: listInfo, node: node});
     }
 }
 
@@ -26,7 +29,7 @@ function resolveAttrValue(attr, node, context, listInfo) {
         var eventName = attr.name.slice(3);
         attr.value.body = attr.value.body.replace(/'\$event'/g, '$event');
         var getHandler = new Function('c', 'd', 'e', 'return function($event){return ' + attr.value.body + ';}');
-
+        
         node.addEventListener(eventName, getHandler(context, listInfo || context.data, ''), false);
         return '';
     } else {

@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 19:48:21 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 17:06:38
+ * @Last Modified time: 2017-08-20 22:07:20
  */
 
 var Extend = require('../utils/extend.js');
@@ -31,45 +31,6 @@ Freemamba.prototype.$inject = function (node) {
 
     this.$render();
     node.append(this.domTree);
-};
-
-Freemamba.prototype.$modify = function (index, model) {
-    var _list = this._list,
-        _listContainer = _list.container,
-        _body = _list.body;
-
-    /**设置数据模型 */
-    _list.data[index] = model;
-
-    /**Dom精确更新 */
-    var targetDom = _listContainer.children[index];
-    var node = this._compile(_body, { item: model, item_index: index });
-
-    _listContainer.replaceChild(node, targetDom);
-};
-
-Freemamba.prototype.$insert = function (index, model, msgBus) {
-    var _list = this._list;
-
-    /**设置数据模型 */
-    _list.data.splice(index, 0, model);
-    this.$render(msgBus);
-};
-
-/**替换列表数据 */
-Freemamba.prototype.$replace = function (newList) {
-    var _list = this._list;
-
-    Freemamba.replaceList(_list.data, newList);
-    this.$render();
-};
-
-Freemamba.prototype.$delete = function (index) {
-    var _list = this._list;
-
-    /**设置数据模型 */
-    _list.data.splice(index, 1);
-    this.$render();
 };
 
 Freemamba.prototype.$render = function (workerRender) {

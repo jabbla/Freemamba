@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 16:44:12 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 17:26:23
+ * @Last Modified time: 2017-08-21 01:52:44
  */
 var attrResolver = require('./attrResolver.js');
 
@@ -24,10 +24,14 @@ function element(ast, context, listInfo) {
     if (ast.children) {
         for (var j = 0; j < ast.children.length; j++) {
             var child = ast.children[j];
-            node.append(context._compile(child, listInfo));
+            var childDom = context._compile(child, listInfo);
+
+            if(child.type === 'list'){
+                context._listBuffer.setAst(ast);
+            }
+            node.append(childDom);
         }
     }
-
     return node;
 }
 
@@ -58,8 +62,17 @@ function list(ast, context) {
     var arrayData = getValue(context, context.data, '');
     var variable = ast.variable;
 
+    context._listBuffer.setData(arrayData);
+    context._listBuffer.setParent(context);
+    context._listBuffer.setName({item: variable, index: variable + '_index'});
+    context._listBuffer.setItemBody(listBody);
+
     for (var j = 0; j < arrayData.length; j++) {
-        node.append(itemNode(listBody, arrayData[j], j));
+        var listItem = itemNode(listBody, arrayData[j], j);
+        context._listBuffer.addListItem(listItem.children[0]);
+
+        node.append(listItem);
+        
     }
 
     function itemNode(body, item, index) {
@@ -68,13 +81,13 @@ function list(ast, context) {
 
         listInfo[variable] = item;
         listInfo[variable + '_index'] = index;
+        
+
         for (var i = 0; i < body.length; i++) {
             node.append(context._compile(body[i], listInfo));
-        }
+        }     
         return node;
     }
-    context._list.data = arrayData;
-    context._list.body = listBody;
 
     return node;
 }

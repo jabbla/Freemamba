@@ -15,7 +15,8 @@
             <input type="text" value={inputText} on-input={this.onInput($event)}/> <button on-click={this.addTask($event)}>添加</button><button on-click={this.onReset($event)}>清空</button>
             <div>
                 <h2>Today</h2>
-                <ul class="test test1" list="today">
+                <ul class="test1" list="today">
+                        <li>全选</li>
                     {#list today as option}
                         <li>{option.name} <button on-click={this.deleteTask(option_index)}>删除</button></li>
                     {/list}
@@ -23,7 +24,7 @@
             </div>
             <div>
                 <h2>Completed</h2>
-                <ul class="test test1" list="completed">
+                <ul class="test2" list="completed">
                     {#list completed as option}
                         <li>{option.name}</li>
                     {/list}

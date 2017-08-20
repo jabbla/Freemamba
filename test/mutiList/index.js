@@ -39,14 +39,17 @@ var myList = new freemamba({
         this.$render();
     },
     deleteTask: function(index){
-        this.$delete(index);
+        this.$list.today.$delete(index);
+    },
+    edit: function(index){
+        this.$list.today.$modify(index, {name: '朱潇然'});
     },
     addTask: function(e){
         var data = this.data,
             inputText = data.inputText,
-            array = data.array;
+            array = data.today;
 
-        this.$insert(array.length, {name: inputText}, myMsgBus);
+        this.$list.today.$insert(array.length, {name: inputText});
     },
     render: function(){
         var data = this.data;

@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 15:05:01 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 17:30:06
+ * @Last Modified time: 2017-08-20 21:10:42
  */
 var Parser = require('..//parser/src/Parser.js');
 
@@ -31,10 +31,11 @@ BaseRenderStore.prototype._configModel = function(model){
 
     if(!model.data) this.data = {};
     this._list = {};
+    this.$list = {};
     this._definer = model;
 };
 
-BaseRenderStore.prototype._compile = function(ast, listInfo){
+BaseRenderStore.prototype._compile = function(ast, listInfo, singleCtx){
     if(ast instanceof Array){
         var node = document.createDocumentFragment();
         for(var i=0;i<ast.length;i++){
@@ -42,7 +43,7 @@ BaseRenderStore.prototype._compile = function(ast, listInfo){
         }
         return node;
     }else{
-        return this._compiler[ast.type](ast, this, listInfo);
+        return this._compiler[ast.type](ast, this, listInfo, singleCtx);
     }
 };
 
