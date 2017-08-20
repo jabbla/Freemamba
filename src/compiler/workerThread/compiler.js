@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 17:12:36 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 11:57:31
+ * @Last Modified time: 2017-08-20 13:34:07
  */
 var attrResolver = require('./attrResolver.js');
 
@@ -15,7 +15,9 @@ function element(ast, context, listInfo){
         var attr = attrs[i];
         
         switch(attr.type){
-            case 'attribute': attrResolver(attr, node, context, listInfo); break;
+            case 'attribute': 
+                attrResolver(attr, node, context, listInfo); break;
+            default:
         }
     }
 
@@ -36,12 +38,12 @@ function text(ast){
 }
 
 function expression(ast, context, listInfo){
-    var text = '';
+    var text = '', getValue;
     if(listInfo){
-        var getValue = new Function('c','d','e','return ('+ast.body+')');
+        getValue = new Function('c','d','e','return ('+ast.body+')');
         text = getValue(context, listInfo, '');
     }else{
-        var getValue = new Function('c','d','e','return ('+ast.body+')');
+        getValue = new Function('c','d','e','return ('+ast.body+')');
         text = getValue(context, context.data, '');
     }
 

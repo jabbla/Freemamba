@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 19:48:21 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 11:58:15
+ * @Last Modified time: 2017-08-20 13:23:44
  */
 
 var Extend = require('../utils/extend.js');
@@ -24,14 +24,14 @@ Freelist.replaceList = function (oldList, newList) {
             oldList[i] = newList[i];
         }
     }
-}
+};
 
 Freelist.prototype.$inject = function (node) {
     this.containerNode = node;
 
     this.$render();
     node.append(this.domTree);
-}
+};
 
 Freelist.prototype.$modify = function (index, model) {
     var _list = this._list,
@@ -46,18 +46,15 @@ Freelist.prototype.$modify = function (index, model) {
     var node = this._compile(_body, { item: model, item_index: index });
 
     _listContainer.replaceChild(node, targetDom);
-}
+};
 
 Freelist.prototype.$insert = function (index, model, msgBus) {
-    var _list = this._list,
-        _listContainer = _list.container,
-        _body = _list.body;
+    var _list = this._list;
 
     /**设置数据模型 */
     _list.data.splice(index, 0, model);
-    console.log('sss');
-    this.$render(myMsgBus);
-}
+    this.$render(msgBus);
+};
 
 /**替换列表数据 */
 Freelist.prototype.$replace = function (newList) {
@@ -68,13 +65,12 @@ Freelist.prototype.$replace = function (newList) {
 };
 
 Freelist.prototype.$delete = function (index) {
-    var _list = this._list,
-        _listContainer = _list.container;
+    var _list = this._list;
 
     /**设置数据模型 */
     _list.data.splice(index, 1);
     this.$render();
-}
+};
 
 Freelist.prototype.$render = function (workerRender) {
     if (workerRender) {
@@ -82,7 +78,7 @@ Freelist.prototype.$render = function (workerRender) {
     } else {
         this._renderSync();
     }
-}
+};
 
 Freelist.prototype._renderSync = function () {
     var newRoot = this.domTree = this._compile(this.AST),
@@ -93,11 +89,9 @@ Freelist.prototype._renderSync = function () {
     if (rootNode) {
         containerNode.replaceChild(newRoot, rootNode);
     }
-}
+};
 
 Freelist.prototype._renderAsync = function (workerRender) {
-    var data = this.data,
-        ast = this.AST;
 
     workerRender.receive({ type: 'render', data: { template: this.template, data: this.data } })
         .then(function (data) {
@@ -106,7 +100,7 @@ Freelist.prototype._renderAsync = function (workerRender) {
 
             Freelist.addAsyncEvents.call(this, this.rootNode, data.events);
         }.bind(this));
-}
+};
 
 Freelist.addAsyncEvents = function (node, events) {
     if (node.getAttribute('list-container')) {
@@ -135,6 +129,6 @@ Freelist.addAsyncEvents = function (node, events) {
     }
 
     delete events[nodeId];
-}
+};
 
 module.exports = Freelist;

@@ -2,24 +2,40 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 19:50:27 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 12:24:58
+ * @Last Modified time: 2017-08-20 13:11:05
  */
 var MessageBus = require('./MessageBus.js');
 var Extend = require('../utils/extend.js');
 
 function WorkerMsgBus(){
     this.super();
-    this._receiveBus = {};
+    this._receiveBusDispatcher = {};
 }
 
 Extend(WorkerMsgBus, MessageBus);
 
 WorkerMsgBus.prototype._initWorker = function(){
+    /*eslint-disable*/
     onmessage = this._onMessage.bind(this);
 }
 
 WorkerMsgBus.prototype._postMessage = function(Info){
+    /*eslint-disable*/
     postMessage(Info);
+}
+
+WorkerMsgBus.prototype.buildReceiveDispatcher = function(type, fn){
+    var dispatcher = this._receiveBusDispatcher;
+    
+    dispatcher[type] = fn;
+}
+
+WorkerMsgBus.prototype._receiveBusResolver = function(Info){
+    var type = Info.type,
+        data = Info.data,
+        dispatcher = this._receiveBusDispatcher;
+
+    dispatcher[type].call(this, data);
 }
 
 WorkerMsgBus.prototype.onReceiveMessage = function(fn){

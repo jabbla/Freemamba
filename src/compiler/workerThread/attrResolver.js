@@ -2,15 +2,21 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 17:14:37 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 11:47:01
+ * @Last Modified time: 2017-08-20 13:34:16
  */
 
 function resolveAttribute(attr, node, context, listInfo){
     var valueType = typeof attr.value;
+
     switch(valueType){
-        case 'string': node.setAttribute(attr.name, attr.value); break;
-        case 'object': node.setAttribute(attr.name, resolveAttrValue(attr, node, context, listInfo)); break;
+        case 'string': 
+            node.setAttribute(attr.name, attr.value); break;
+        case 'object': 
+            node.setAttribute(attr.name, resolveAttrValue(attr, node, context, listInfo)); break;
+        default:
     }
+    
+    
 
     if(attr.name === 'list-container'){
         node.setAttribute('list-container', true);
