@@ -13,8 +13,8 @@ Element.prototype.setAttribute = function(attrName, attrValue){
     this._attrs.push({name: attrName, value: attrValue});
 };
 
-Element.prototype.addEventListener = function(eventName, handler){
-    this._events.push({name: eventName.replace(/-/, ''), value: handler});
+Element.prototype.addEventListener = function(eventName, handler, isPop, argContext){
+    this._events.push({name: eventName.replace(/-/, ''), value: handler, context: argContext});
 };
 
 Element.prototype.append = function(node){

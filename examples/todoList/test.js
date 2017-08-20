@@ -40,8 +40,8 @@ var myList = new freemamba({
         var data = this.data,
             inputText = data.inputText,
             array = data.array;
-        
-        this.$insert(array.length, {name: inputText});
+
+        this.$insert(array.length, {name: inputText}, myMsgBus);
     },
     render: function(){
         var data = this.data;

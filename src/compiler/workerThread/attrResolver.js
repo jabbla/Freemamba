@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 17:14:37 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-19 17:58:31
+ * @Last Modified time: 2017-08-20 11:47:01
  */
 
 function resolveAttribute(attr, node, context, listInfo){
@@ -24,8 +24,9 @@ function resolveAttrValue(attr, node, context, listInfo){
         var eventName = attr.name.slice(3);
         attr.value.body = attr.value.body.replace(/'\$event'/g, '$event');
         var getHandler = new Function('c', 'd', 'e', 'return function($event){return '+attr.value.body+';}');
+        var argContext = listInfo || context.data;
 
-        node.addEventListener(eventName, getHandler(context, listInfo || context.data, ''), false);
+        node.addEventListener(eventName, getHandler(context, argContext, ''), false, argContext);
         return '';
     }else{
         var getValue = new Function('c','d','e','return ('+attr.value.body+')');

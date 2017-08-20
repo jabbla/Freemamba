@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 19:51:53 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-19 20:13:39
+ * @Last Modified time: 2017-08-20 12:29:19
  */
 function MessageBus(){
     this._onSendWorker = [];
@@ -18,8 +18,12 @@ MessageBus.prototype._initWorker = function(){
 }
 
 MessageBus.prototype._onMessage = function(message){
-
     this._deserialize(message);
+    this._receiveBusResolver();
+}
+
+MessageBus.prototype._receiveBusResolver = function(Info){
+
 }
 
 MessageBus.prototype.receive = function(message){
@@ -35,7 +39,6 @@ MessageBus.prototype.addEvent = function(eventType, fn){
 MessageBus.prototype._deserialize = function(message){
     var type = message.data.type,
         data = message.data.data;
-
     this._emit(type, data);
 }
 

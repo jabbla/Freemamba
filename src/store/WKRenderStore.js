@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 19:48:44 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-19 20:00:12
+ * @Last Modified time: 2017-08-20 11:50:10
  */
 
 var BaseRenderStore = require('./BaseRenderStore.js');
@@ -77,7 +77,6 @@ RenderStore.prototype.flatNode = function(node){
         this.events[nodeId] = events;
     }
     this.nodeId++;
-
     return '<'+tagName+' '+attrStr+eventStr+'>'+body+'</'+tagName+'>';
 }   
 

@@ -1,8 +1,8 @@
 /*
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 19:48:21 
- * @Last Modified by:   zhuxiaoran 
- * @Last Modified time: 2017-08-19 19:48:21 
+ * @Last Modified by: zhuxiaoran
+ * @Last Modified time: 2017-08-20 11:58:15
  */
 
 var Extend = require('../utils/extend.js');
@@ -48,15 +48,15 @@ Freelist.prototype.$modify = function (index, model) {
     _listContainer.replaceChild(node, targetDom);
 }
 
-Freelist.prototype.$insert = function (index, model) {
+Freelist.prototype.$insert = function (index, model, msgBus) {
     var _list = this._list,
         _listContainer = _list.container,
         _body = _list.body;
 
     /**设置数据模型 */
     _list.data.splice(index, 0, model);
-
-    this.$render();
+    console.log('sss');
+    this.$render(myMsgBus);
 }
 
 /**替换列表数据 */
@@ -124,17 +124,17 @@ Freelist.addAsyncEvents = function (node, events) {
         if (id == nodeId) {
             var eventHub = events[id];
             for (var j = 0; j < eventHub.length; j++) {
+                var context = eventHub[j].context;
                 var getHandler = new Function('c', 'd', 'e', 'return ' + eventHub[j].value + ';');
-                var handler = getHandler(this, this.data, '');
-                node.addEventListener(eventHub[j].name, getHandler(this, this.data, ''), false);
+                var handler = getHandler(this, context || this.data, '');
+
+                node.addEventListener(eventHub[j].name, handler, false);
             }
             break;
         }
     }
 
-
     delete events[nodeId];
-
 }
 
 module.exports = Freelist;

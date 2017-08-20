@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 17:12:36 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-19 17:17:38
+ * @Last Modified time: 2017-08-20 11:57:31
  */
 var attrResolver = require('./attrResolver.js');
 
@@ -70,6 +70,7 @@ function list(ast, context){
         for(var i=0;i<body.length;i++){
             node.append(context._compile(body[i], listInfo));
         }
+
         return node;
     }
     context._list.data = arrayData;
