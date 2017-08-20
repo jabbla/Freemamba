@@ -2,21 +2,21 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 19:48:21 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 13:23:44
+ * @Last Modified time: 2017-08-20 17:06:38
  */
 
 var Extend = require('../utils/extend.js');
 var BaseRenderStore = require('./BaseRenderStore.js');
 var Compiler = require('../compiler/mainThread/compiler.js');
 
-function Freelist(config) {
+function Freemamba(config) {
     this.super(config);
     this._compiler = Compiler;
 }
 
-Extend(Freelist, BaseRenderStore);
+Extend(Freemamba, BaseRenderStore);
 
-Freelist.replaceList = function (oldList, newList) {
+Freemamba.replaceList = function (oldList, newList) {
     for (var i = oldList.length - 1; i >= 0; i--) {
         if (typeof newList[i] === 'undefined') {
             oldList.splice(i, 1);
@@ -26,14 +26,14 @@ Freelist.replaceList = function (oldList, newList) {
     }
 };
 
-Freelist.prototype.$inject = function (node) {
+Freemamba.prototype.$inject = function (node) {
     this.containerNode = node;
 
     this.$render();
     node.append(this.domTree);
 };
 
-Freelist.prototype.$modify = function (index, model) {
+Freemamba.prototype.$modify = function (index, model) {
     var _list = this._list,
         _listContainer = _list.container,
         _body = _list.body;
@@ -48,7 +48,7 @@ Freelist.prototype.$modify = function (index, model) {
     _listContainer.replaceChild(node, targetDom);
 };
 
-Freelist.prototype.$insert = function (index, model, msgBus) {
+Freemamba.prototype.$insert = function (index, model, msgBus) {
     var _list = this._list;
 
     /**设置数据模型 */
@@ -57,14 +57,14 @@ Freelist.prototype.$insert = function (index, model, msgBus) {
 };
 
 /**替换列表数据 */
-Freelist.prototype.$replace = function (newList) {
+Freemamba.prototype.$replace = function (newList) {
     var _list = this._list;
 
-    Freelist.replaceList(_list.data, newList);
+    Freemamba.replaceList(_list.data, newList);
     this.$render();
 };
 
-Freelist.prototype.$delete = function (index) {
+Freemamba.prototype.$delete = function (index) {
     var _list = this._list;
 
     /**设置数据模型 */
@@ -72,7 +72,7 @@ Freelist.prototype.$delete = function (index) {
     this.$render();
 };
 
-Freelist.prototype.$render = function (workerRender) {
+Freemamba.prototype.$render = function (workerRender) {
     if (workerRender) {
         this._renderAsync(workerRender);
     } else {
@@ -80,7 +80,7 @@ Freelist.prototype.$render = function (workerRender) {
     }
 };
 
-Freelist.prototype._renderSync = function () {
+Freemamba.prototype._renderSync = function () {
     var newRoot = this.domTree = this._compile(this.AST),
         containerNode = this.containerNode,
         rootNode = this.rootNode;
@@ -91,25 +91,25 @@ Freelist.prototype._renderSync = function () {
     }
 };
 
-Freelist.prototype._renderAsync = function (workerRender) {
+Freemamba.prototype._renderAsync = function (workerRender) {
 
     workerRender.receive({ type: 'render', data: { template: this.template, data: this.data } })
         .then(function (data) {
             this.containerNode.innerHTML = data.html;
             this.rootNode = this.containerNode.children[0];
 
-            Freelist.addAsyncEvents.call(this, this.rootNode, data.events);
+            Freemamba.addAsyncEvents.call(this, this.rootNode, data.events);
         }.bind(this));
 };
 
-Freelist.addAsyncEvents = function (node, events) {
+Freemamba.addAsyncEvents = function (node, events) {
     if (node.getAttribute('list-container')) {
         this._list.container = node;
     }
     if (typeof node.dataset === 'undefined' || typeof node.dataset.nodeID === 'undefined') {
         if (!node.children) return;
         for (var i = 0; i < node.children.length; i++) {
-            Freelist.addAsyncEvents.call(this, node.children[i], events);
+            Freemamba.addAsyncEvents.call(this, node.children[i], events);
         }
     }
     var nodeId = node.dataset.nodeid;
@@ -131,4 +131,4 @@ Freelist.addAsyncEvents = function (node, events) {
     delete events[nodeId];
 };
 
-module.exports = Freelist;
+module.exports = Freemamba;

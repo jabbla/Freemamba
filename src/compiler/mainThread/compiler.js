@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 16:44:12 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-19 16:54:59
+ * @Last Modified time: 2017-08-20 17:26:23
  */
 var attrResolver = require('./attrResolver.js');
 
@@ -16,6 +16,7 @@ function element(ast, context, listInfo) {
 
         switch (attr.type) {
             case 'attribute': attrResolver(attr, node, context, listInfo); break;
+            default:
         }
     }
 
@@ -36,12 +37,12 @@ function text(ast) {
 }
 
 function expression(ast, context, listInfo) {
-    var text = '';
+    var text = '', getValue;
     if (listInfo) {
-        var getValue = new Function('c', 'd', 'e', 'return (' + ast.body + ')');
+        getValue = new Function('c', 'd', 'e', 'return (' + ast.body + ')');
         text = getValue(context, listInfo, '');
     } else {
-        var getValue = new Function('c', 'd', 'e', 'return (' + ast.body + ')');
+        getValue = new Function('c', 'd', 'e', 'return (' + ast.body + ')');
         text = getValue(context, context.data, '');
     }
 

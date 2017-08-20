@@ -2,11 +2,12 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 15:05:01 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-19 18:04:46
+ * @Last Modified time: 2017-08-20 17:30:06
  */
 var Parser = require('..//parser/src/Parser.js');
 
 if(!this.document){
+    /*eslint-disable*/
     document = require('../vdom/Document.js');
 }
 
@@ -31,7 +32,7 @@ BaseRenderStore.prototype._configModel = function(model){
     if(!model.data) this.data = {};
     this._list = {};
     this._definer = model;
-}
+};
 
 BaseRenderStore.prototype._compile = function(ast, listInfo){
     if(ast instanceof Array){
@@ -43,7 +44,7 @@ BaseRenderStore.prototype._compile = function(ast, listInfo){
     }else{
         return this._compiler[ast.type](ast, this, listInfo);
     }
-}
+};
 
 BaseRenderStore.prototype._parse = function(){
     this.AST = new Parser(this.template).parse();
@@ -59,6 +60,6 @@ BaseRenderStore.prototype._sg_ = function (path, data) {
         result = data[path];
     }
     return result;
-}
+};
 
 module.exports = BaseRenderStore;

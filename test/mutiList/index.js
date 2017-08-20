@@ -14,10 +14,15 @@ var myList = new freemamba({
             user: {
                 name: 'zhuxiaoran'
             },
-            array: [
+            today: [
                 {name: 'test1'},
                 {name: 'test2'},
                 {name: 'test3'}
+            ],
+            completed: [
+                {name: '实现MessageBus继承'},
+                {name: '实现RenderStore继承'},
+                {name: '完善工程目录'}
             ],
             inputText: ''
         });

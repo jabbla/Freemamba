@@ -8,20 +8,32 @@
 </head>
 <body>
     <div id="container"></div>
-    <script id="text" type="text/html">
+    <div id="text" style="display: none;">
         <div class="wraper">
             <h2>{title}</h2>
             <h3>Hello,{user.name}</h3>
             <input type="text" value={inputText} on-input={this.onInput($event)}/> <button on-click={this.addTask($event)}>添加</button><button on-click={this.onReset($event)}>清空</button>
-            <ul class="test test1" list-container>
-                {#list array as option}
-                    <li>{option.name} <button on-click={this.deleteTask(option_index)}>删除</button></li>
-                {/list}
-            </ul>
+            <div>
+                <h2>Today</h2>
+                <ul class="test test1" list="today">
+                    {#list today as option}
+                        <li>{option.name} <button on-click={this.deleteTask(option_index)}>删除</button></li>
+                    {/list}
+                </ul>
+            </div>
+            <div>
+                <h2>Completed</h2>
+                <ul class="test test1" list="completed">
+                    {#list completed as option}
+                        <li>{option.name}</li>
+                    {/list}
+                </ul>
+            </div>
+
             <button on-click={this.render($event)}>Worker渲染</button>
         </div>
-    </script>
+    </div>
     <script src="../../dist/Freemamba.js"></script>
-    <script src="./test.js"></script>
+    <script src="./index.js"></script>
 </body>
 </html>
