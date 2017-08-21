@@ -7,7 +7,6 @@
     "webpack-dev-server": "^2.7.1"
   },
   "scripts": {
-    "postinstall": "cp .hooks/* .git/hooks/",
     "start": "webpack-dev-server --open"
   },
   "pre-commit": [

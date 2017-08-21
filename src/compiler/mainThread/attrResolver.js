@@ -4,8 +4,6 @@
  * @Last Modified by: zhuxiaoran
  * @Last Modified time: 2017-08-21 01:47:27
  */
-var List = require('../../list/List.js');
-
 function resolveAttribute(attr, node, context, listInfo) {
     var valueType = typeof attr.value;
     switch (valueType) {
@@ -14,11 +12,6 @@ function resolveAttribute(attr, node, context, listInfo) {
         case 'object': 
             node.setAttribute(attr.name, resolveAttrValue(attr, node, context, listInfo)); break;
         default:
-    }
-
-    if (attr.name === 'list' && attr.value) {
-        /**创建List实例 */
-        context._listBuffer = context.$list[attr.value] = new List({data: listInfo, node: node});
     }
 }
 

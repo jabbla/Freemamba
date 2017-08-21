@@ -13,7 +13,7 @@ function List(config){
 
 List.prototype.$insert = function(index, model){
     var data = this.data;
-    
+
     data.splice(index, 0, model);
     this.$render();
 };

@@ -5,15 +5,20 @@
  * @Last Modified time: 2017-08-21 01:52:44
  */
 var attrResolver = require('./attrResolver.js');
+var List = require('../../list/List.js');
 
 function element(ast, context, listInfo) {
     var node = document.createElement(ast.tag);
 
-    var attrs = ast.attrs;
+    var attrs = ast.attrs, listBuffer;
     /**处理属性 */
     for (var i = 0; i < attrs.length; i++) {
         var attr = attrs[i];
 
+        if(attr.name === 'list' && attr.value){
+            listBuffer = context.$list[attr.value] = new List({data: listInfo, node: node});
+            debugger;
+        }
         switch (attr.type) {
             case 'attribute': attrResolver(attr, node, context, listInfo); break;
             default:
@@ -24,14 +29,16 @@ function element(ast, context, listInfo) {
     if (ast.children) {
         for (var j = 0; j < ast.children.length; j++) {
             var child = ast.children[j];
-            var childDom = context._compile(child, listInfo);
+            var childDom = context._compile(child, listInfo, listBuffer);
 
             if(child.type === 'list'){
-                context._listBuffer.setAst(ast);
+               listBuffer.setAst(ast);
             }
+
             node.append(childDom);
         }
     }
+    debugger;
     return node;
 }
 
@@ -55,21 +62,24 @@ function expression(ast, context, listInfo) {
     return node;
 }
 
-function list(ast, context) {
+function list(ast, context, listBuffer) {
     var listBody = ast.body;
     var node = document.createDocumentFragment();
     var getValue = new Function('c', 'd', 'e', 'return (' + ast.sequence.body + ')');
     var arrayData = getValue(context, context.data, '');
     var variable = ast.variable;
 
-    context._listBuffer.setData(arrayData);
-    context._listBuffer.setParent(context);
-    context._listBuffer.setName({item: variable, index: variable + '_index'});
-    context._listBuffer.setItemBody(listBody);
+    if(listBuffer){
+        listBuffer.setData(arrayData);
+        listBuffer.setParent(context);
+        listBuffer.setName({item: variable, index: variable + '_index'});
+        listBuffer.setItemBody(listBody);
+    }
 
     for (var j = 0; j < arrayData.length; j++) {
         var listItem = itemNode(listBody, arrayData[j], j);
-        context._listBuffer.addListItem(listItem.children[0]);
+
+        listBuffer && listBuffer.addListItem(listItem.children[0]);
 
         node.append(listItem);
         

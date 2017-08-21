@@ -9,11 +9,14 @@
 
 于是，Freemamba诞生了，目前还是一个比较初级的框架，跟React很像，语法类似Regular。
 
+## 引用
+模板解析引用Regular中的Parser
+
 ## 实现的特性
 1. 渲染模式（除2.中方法外，可手动控制渲染）：同步渲染 、Web Worker渲染
 2. 操作列表方法：插入、删除、修改、替换列表
 3. Regular模版语法：数据绑定、事件绑定、列表渲染
-4. 生命周期：config、init（类似Regular）
+4. 生命周期：config init（类似Regular）
 5. WebWorker vDom: Worker中的虚拟DOM（可扩展类似React的diff最小化更新）
 6. MessageBus: 负责主线程和Worker的消息分发
 
@@ -21,10 +24,7 @@
 1. 条件渲染和computed属性
 2. 多列表以及列表嵌套
 3. Worker中diff探查
-4. MessageBus连接池
-5. 自定义组件
-
-
+4. 自定义组件
 
 ## 使用说明
 ### /dist/Freemamba.js
