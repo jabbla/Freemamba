@@ -32,13 +32,12 @@ function element(ast, context, listInfo) {
             var childDom = context._compile(child, listInfo, listBuffer);
 
             if(child.type === 'list'){
-               listBuffer.setAst(ast);
+                listBuffer.setAst(ast);
             }
 
             node.append(childDom);
         }
     }
-    debugger;
     return node;
 }
 
