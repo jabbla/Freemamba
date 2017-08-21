@@ -17,8 +17,8 @@ function element(ast, context, listInfo) {
 
         if(attr.name === 'list' && attr.value){
             listBuffer = context.$list[attr.value] = new List({data: listInfo, node: node});
-            debugger;
         }
+
         switch (attr.type) {
             case 'attribute': attrResolver(attr, node, context, listInfo); break;
             default:
@@ -29,6 +29,7 @@ function element(ast, context, listInfo) {
     if (ast.children) {
         for (var j = 0; j < ast.children.length; j++) {
             var child = ast.children[j];
+
             var childDom = context._compile(child, listInfo, listBuffer);
 
             if(child.type === 'list'){
@@ -48,25 +49,22 @@ function text(ast) {
 
 function expression(ast, context, listInfo) {
     var text = '', getValue;
-    if (listInfo) {
-        getValue = new Function('c', 'd', 'e', 'return (' + ast.body + ')');
-        text = getValue(context, listInfo, '');
-    } else {
-        getValue = new Function('c', 'd', 'e', 'return (' + ast.body + ')');
-        text = getValue(context, context.data, '');
-    }
+    
+    getValue = new Function('c', 'd', 'e', 'return (' + ast.body + ')');
+    text = getValue(context, listInfo || context.data, '');
 
     var node = document.createTextNode(text);
 
     return node;
 }
 
-function list(ast, context, listBuffer) {
-    var listBody = ast.body;
-    var node = document.createDocumentFragment();
-    var getValue = new Function('c', 'd', 'e', 'return (' + ast.sequence.body + ')');
-    var arrayData = getValue(context, context.data, '');
-    var variable = ast.variable;
+function list(ast, context, listInfo, listBuffer) {
+    var listBody = ast.body,
+        node = document.createDocumentFragment(),
+        getValue = new Function('c', 'd', 'e', 'return (' + ast.sequence.body + ')'),
+        arrayData = getValue(context, listInfo || context.data, ''),
+        variable = ast.variable;
+
 
     if(listBuffer){
         listBuffer.setData(arrayData);
@@ -81,7 +79,6 @@ function list(ast, context, listBuffer) {
         listBuffer && listBuffer.addListItem(listItem.children[0]);
 
         node.append(listItem);
-        
     }
 
     function itemNode(body, item, index) {
@@ -94,7 +91,8 @@ function list(ast, context, listBuffer) {
 
         for (var i = 0; i < body.length; i++) {
             node.append(context._compile(body[i], listInfo));
-        }     
+        }
+
         return node;
     }
 

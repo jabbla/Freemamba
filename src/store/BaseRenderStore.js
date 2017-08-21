@@ -32,18 +32,20 @@ BaseRenderStore.prototype._configModel = function(model){
     if(!model.data) this.data = {};
     this._list = {};
     this.$list = {};
+    this.$refs = {};
     this._definer = model;
 };
 
-BaseRenderStore.prototype._compile = function(ast, listInfo, singleCtx){
+BaseRenderStore.prototype._compile = function(ast, listInfo, listBuffer){
     if(ast instanceof Array){
         var node = document.createDocumentFragment();
         for(var i=0;i<ast.length;i++){
-            node.append(this._compile(ast[i], listInfo));
+            node.append(this._compile(ast[i], listInfo, listBuffer));
         }
         return node;
     }else{
-        return this._compiler[ast.type](ast, this, listInfo, singleCtx);
+        debugger;
+        return this._compiler[ast.type](ast, this, listInfo, listBuffer);
     }
 };
 

@@ -5,14 +5,21 @@
  * @Last Modified time: 2017-08-21 01:47:27
  */
 function resolveAttribute(attr, node, context, listInfo) {
-    var valueType = typeof attr.value;
+    var valueType = typeof attr.value,
+        attrValue;
     switch (valueType) {
         case 'string': 
-            node.setAttribute(attr.name, attr.value); break;
+            attrValue = attr.value; break;
         case 'object': 
-            node.setAttribute(attr.name, resolveAttrValue(attr, node, context, listInfo)); break;
+            attrValue = resolveAttrValue(attr, node, context, listInfo); break;
         default:
     }
+    /**ref拦截 */
+    if(attr.name === 'ref'){
+        context.$refs[attrValue] = node;
+    }
+
+    node.setAttribute(attr.name, attrValue);
 }
 
 function resolveAttrValue(attr, node, context, listInfo) {
@@ -27,7 +34,8 @@ function resolveAttrValue(attr, node, context, listInfo) {
         return '';
     } else {
         var getValue = new Function('c', 'd', 'e', 'return (' + attr.value.body + ')');
-        return getValue(context, context.data, '');
+
+        return getValue(context, listInfo || context.data, '');
     }
 }
 

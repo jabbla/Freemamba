@@ -4,24 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./main.css" />
     <title>Freemamba-todo</title>
 </head>
 <body>
     <div id="container"></div>
     <script id="text" type="text/html">
         <div class="wraper">
-            <h2>{title}</h2>
-            <h3>Hello,{user.name}</h3>
+            <h2>Freemamba todoList</h2>
             <input type="text" value={inputText} on-input={this.onInput($event)}/> <button on-click={this.addTask($event)}>添加</button><button on-click={this.onReset($event)}>清空</button>
-            <ul class="test test1" list-container>
-                {#list array as option}
-                    <li>{option.name} <button on-click={this.deleteTask(option_index)}>删除</button></li>
+            <h2>Today</h2>
+            <ul class="today-list" list="today">
+                {#list tasks as task}
+                    <li class="task">
+                        <input type="checkbox" ref={'check'+task_index} on-click={this.toggleCheck(task_index, task)}/>
+                        <input class="info" on-blur={this.disableInfo(task_index)} ref={'info'+task_index} disabled="disabled" type="text" value={task.name}/>
+                        <button on-click={this.deleteTask(task_index)}>删除</button>
+                        <button on-click={this.completeTask(task_index, task)}>完成</button>
+                        <button on-click={this.editTask(task_index)}>编辑</button>
+                    </li>
+                {/list}
+            </ul>
+            <button on-click={this.batchComplete()}>批量完成</button>
+            <h2>Completed</h2>
+            <ul class="today-list" list="completed">
+                {#list completed as task}
+                    <li class="task">{task.name} <span>完成</span></li>
                 {/list}
             </ul>
             <button on-click={this.render($event)}>Worker渲染</button>
         </div>
     </script>
     <script src="../../dist/Freemamba.js"></script>
-    <script src="./test.js"></script>
+    <script src="./index.js"></script>
 </body>
 </html>

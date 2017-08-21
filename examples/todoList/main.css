@@ -1,0 +1,12 @@
+.today-list {
+    list-style: none;
+}
+
+.task .info{
+    color: black;
+    border: none;
+}
+
+.task .info:disabled {
+    background-color: white;
+}
