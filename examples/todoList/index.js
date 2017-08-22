@@ -54,7 +54,7 @@ var myList = new freemamba({
         for(var j=tasks.length-1;j>=0;j--){
             if(tasks[j].checked){
                 tasks[j].completed = true;
-                completed.push(tasks[j]);
+                completed.unshift(tasks[j]);
                 tasks.splice(j, 1);
             }
         }
@@ -62,12 +62,16 @@ var myList = new freemamba({
         $completed.render();
     },
     deleteTask: function(index){
-        this.$list.today.$delete(index);
+        this.$list.today.delete(index);
     },
     editTask: function(index){
         var input = this.$refs['info'+index];
         input.disabled = '';
         input.focus();
+    },
+    onInfoEdit: function(e, task, taskIndex){
+        task.name = e.target.value;
+        this.$list.today.modify(taskIndex, task);
     },
     disableInfo: function(index){
         var input = this.$refs['info'+index];
@@ -78,13 +82,12 @@ var myList = new freemamba({
             inputText = data.inputText,
             tasks = data.tasks;
 
-        this.$list.today.$insert(tasks.length, {name: inputText, checked: false, completed: false});
+        this.$list.today.insert(tasks.length, {name: inputText, checked: false, completed: false});
     },
     render: function(){
         var data = this.data;
 
-        this.$replace([{name: '朱潇然'}]);
-        this.$render();
+        this.replace([{name: '朱潇然'}]);
     }
 });
 

@@ -18,7 +18,7 @@
                 {#list tasks as task}
                     <li class="task">
                         <input type="checkbox" ref={'check'+task_index} on-click={this.toggleCheck(task_index, task)}/>
-                        <input class="info" on-blur={this.disableInfo(task_index)} ref={'info'+task_index} disabled="disabled" type="text" value={task.name}/>
+                        <input class="info" on-input={this.onInfoEdit($event, task, task_index)} on-blur={this.disableInfo(task_index)} ref={'info'+task_index} disabled="disabled" type="text" value={task.name}/>
                         <button on-click={this.deleteTask(task_index)}>删除</button>
                         <button on-click={this.completeTask(task_index, task)}>完成</button>
                         <button on-click={this.editTask(task_index)}>编辑</button>

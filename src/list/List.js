@@ -11,7 +11,7 @@ function List(config){
     this.listItems = [];
 }
 
-List.prototype.$insert = function(index, model){
+List.prototype.insert = function(index, model){
     var data = this.data;
 
     data.splice(index, 0, model);
@@ -47,7 +47,7 @@ List.prototype.setName = function(config){
     this.indexName = config.index;
 };
 
-List.prototype.$modify = function(index, model){
+List.prototype.modify = function(index, model){
     var targetDom = this.listItems[index],
         itemAst = this.itemAst, itemName = this.itemName,
         indexName = this.indexName, tempListData = {};
@@ -59,15 +59,16 @@ List.prototype.$modify = function(index, model){
 
     this.listItems[index] = newChild.children[0];
     this.data[index] = model;
+
     this.node.replaceChild(newChild, targetDom);
 };
 
-List.prototype.$delete = function(index){
+List.prototype.delete = function(index){
     this.data.splice(index, 1);
     this.render();
 };
 
-List.prototype.$replace = function(newListData){
+List.prototype.replace = function(newListData){
     List.replaceList(this.data, newListData);
     this.render();
 };
