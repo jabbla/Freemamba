@@ -44,7 +44,6 @@ BaseRenderStore.prototype._compile = function(ast, listInfo, listBuffer){
         }
         return node;
     }else{
-        debugger;
         return this._compiler[ast.type](ast, this, listInfo, listBuffer);
     }
 };
