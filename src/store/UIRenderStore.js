@@ -34,11 +34,7 @@ Freemamba.prototype.$inject = function (node) {
 };
 
 Freemamba.prototype.$render = function (workerRender) {
-    if (workerRender) {
-        this._renderAsync(workerRender);
-    } else {
-        this._renderSync();
-    }
+    workerRender? this._renderAsync(workerRender) : this._renderSync();
 };
 
 Freemamba.prototype._renderSync = function () {

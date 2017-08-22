@@ -41,8 +41,8 @@ var myList = new freemamba({
     deleteTask: function(index){
         this.$list.today.$delete(index);
     },
-    edit: function(index){
-        this.$list.today.$modify(index, {name: '朱潇然'});
+    editTask: function(index){
+        this.$list.completed.$modify(index, {name: '朱潇然'});
     },
     addTask: function(e){
         var data = this.data,

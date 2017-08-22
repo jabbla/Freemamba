@@ -11,11 +11,11 @@ function List(config){
     this.listItems = [];
 }
 
-List.prototype.$insert = function(index, model){
+List.prototype.insert = function(index, model){
     var data = this.data;
-    
+
     data.splice(index, 0, model);
-    this.$render();
+    this.render();
 };
 
 List.prototype.setData = function(array){
@@ -32,15 +32,10 @@ List.prototype.setParent = function(parent){
 
 List.prototype.addListItem = function(node){
     this.listItems.push(node);
-
-};
-
-List.prototype.addOutter = function(node){
-    this.outterFrag.append(node);
 };
 
 List.prototype.setItemBody = function(body){
-    this.itemAstBody = body;
+    this.itemAst = body;
 };
 
 List.prototype.getNode = function(){
@@ -52,39 +47,38 @@ List.prototype.setName = function(config){
     this.indexName = config.index;
 };
 
-List.prototype.$modify = function(index, model){
+List.prototype.modify = function(index, model){
     var targetDom = this.listItems[index],
-        itemAstBody = this.itemAstBody, itemName = this.itemName,
+        itemAst = this.itemAst, itemName = this.itemName,
         indexName = this.indexName, tempListData = {};
     
     tempListData[itemName] = model;
     tempListData[indexName] = index;
 
-    var newChild = this.parent._compile(itemAstBody, tempListData);
+    var newChild = this.parent._compile(itemAst, tempListData);
 
     this.listItems[index] = newChild.children[0];
     this.data[index] = model;
+
     this.node.replaceChild(newChild, targetDom);
 };
 
-List.prototype.$delete = function(index){
-    var targetDom = this.listItems[index];
-
+List.prototype.delete = function(index){
     this.data.splice(index, 1);
-    this.listItems.splice(index, 1);
-    this.node.removeChild(targetDom);
+    this.render();
 };
 
-List.prototype.$replace = function(newListData){
+List.prototype.replace = function(newListData){
     List.replaceList(this.data, newListData);
-    this.$render();
+    this.render();
 };
 
-List.prototype.$render = function(){
+List.prototype.render = function(){
     this.listItems = [];
     this.node.innerHTML = '';
-    this.node.append(this.parent._compile(this.ast.children));
 
+    var newBody = this.parent._compile(this.ast.children, null, this);
+    this.node.append(newBody);
 };
 
 List.replaceList = function (oldList, newList) {

@@ -1,13 +1,13 @@
 {
   "devDependencies": {
     "babili-webpack-plugin": "^0.1.2",
+    "eslint": "^4.5.0",
     "pre-commit": "^1.2.2",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "webpack": "^3.5.4",
     "webpack-dev-server": "^2.7.1"
   },
   "scripts": {
-    "postinstall": "cp .hooks/* .git/hooks/",
     "start": "webpack-dev-server --open"
   },
   "pre-commit": [

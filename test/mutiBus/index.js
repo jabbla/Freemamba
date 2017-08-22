@@ -34,20 +34,20 @@ var myList = new freemamba({
         this.$render();
     },
     deleteTask: function(index){
-        this.$delete(index);
+        this.$list.test.$delete(index);
     },
     addTask: function(e){
         var data = this.data,
             inputText = data.inputText,
             array = data.array;
 
-        this.$insert(array.length, {name: inputText}, myMsgBus);
+        this.$list.test.$insert(array.length, {name: inputText}, myMsgBus);
     },
     render: function(){
         var data = this.data;
 
-        this.$replace([{name: '朱潇然'}]);
-        this.$render(myMsgBus);
+        this.$list.test.$replace([{name: '朱潇然'}]);
+        this.$render();
     }
 });
 

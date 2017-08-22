@@ -10,14 +10,19 @@ var myList = new freemamba({
     template: tpl,
     config: function(data){
         Object.assign(data, {
-            title: 'Freemamba todoList',
+            title: 'Freemamba 多级列表',
             user: {
                 name: 'zhuxiaoran'
             },
-            array: [
-                {name: 'test1'},
-                {name: 'test2'},
-                {name: 'test3'}
+            today: [
+                {name: '手机', list: [{name: '锤子M1'}, {name: '小米6'}, {name: '果7'}]},
+                {name: '电脑', list: [{name: '联想Y410p'}, {name: 'Dell'}, {name: 'MacBook Pro'}]},
+                {name: '平板', list: [{name: 'ipad'}, {name: 'ipad pro'}, {name: 'surface'}]}
+            ],
+            completed: [
+                {name: '实现MessageBus继承'},
+                {name: '实现RenderStore继承'},
+                {name: '完善工程目录'}
             ],
             inputText: ''
         });
@@ -34,14 +39,17 @@ var myList = new freemamba({
         this.$render();
     },
     deleteTask: function(index){
-        this.$delete(index);
+        this.$list.cate.$delete(index);
     },
-    addTask: function(e){
+    editTask: function(index){
+        this.$list.completed.$modify(index, {name: '朱潇然'});
+    },
+    addCate: function(e){
         var data = this.data,
             inputText = data.inputText,
-            array = data.array;
+            array = data.today;
 
-        this.$insert(array.length, {name: inputText}, myMsgBus);
+        this.$list.cate.$insert(array.length, {name: inputText, list: [{name: '1111'}, {name: '2222'}]});
     },
     render: function(){
         var data = this.data;
