@@ -39,23 +39,22 @@ var myList = new freemamba({
         this.$render();
     },
     deleteTask: function(index){
-        this.$list.cate.$delete(index);
+        this.$list.cate.delete(index);
     },
     editTask: function(index){
-        this.$list.completed.$modify(index, {name: '朱潇然'});
+        this.$list.completed.modify(index, {name: '朱潇然'});
     },
     addCate: function(e){
         var data = this.data,
             inputText = data.inputText,
             array = data.today;
 
-        this.$list.cate.$insert(array.length, {name: inputText, list: [{name: '1111'}, {name: '2222'}]});
+        this.$list.cate.insert(array.length, {name: inputText, list: [{name: '1111'}, {name: '2222'}]});
     },
     render: function(){
         var data = this.data;
 
-        this.$replace([{name: '朱潇然'}]);
-        this.$render(myMsgBus);
+        this.$list.cate.replace([{name: '朱潇然'}]);
     }
 });
 

@@ -16,24 +16,23 @@ function Freemamba(config) {
 
 Extend(Freemamba, BaseRenderStore);
 
-Freemamba.replaceList = function (oldList, newList) {
-    for (var i = oldList.length - 1; i >= 0; i--) {
-        if (typeof newList[i] === 'undefined') {
-            oldList.splice(i, 1);
-        } else {
-            oldList[i] = newList[i];
-        }
-    }
-};
-
 Freemamba.prototype.$inject = function (node) {
     this.containerNode = node;
 
     this.$render();
-    node.append(this.domTree);
 };
 
 Freemamba.prototype.$render = function (workerRender) {
+    var self = this;
+    if(this._timer){
+        clearTimeout(this._timer);
+    }
+    this._timer = setTimeout(function(){
+        self._render(workerRender);
+    }, 0);
+};
+
+Freemamba.prototype._render = function(workerRender){
     workerRender? this._renderAsync(workerRender) : this._renderSync();
 };
 
@@ -43,9 +42,7 @@ Freemamba.prototype._renderSync = function () {
         rootNode = this.rootNode;
 
     this.rootNode = newRoot.children[0];
-    if (rootNode) {
-        containerNode.replaceChild(newRoot, rootNode);
-    }
+    rootNode? containerNode.replaceChild(newRoot, rootNode) : containerNode.append(newRoot);
 };
 
 Freemamba.prototype._renderAsync = function (workerRender) {

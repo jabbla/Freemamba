@@ -74,6 +74,16 @@ List.prototype.replace = function(newListData){
 };
 
 List.prototype.render = function(){
+    var self = this;
+    if(this._timer){
+        clearTimeout(this._timer)
+    }
+    this._timer = setTimeout(function(){
+        self._render();
+    }, 0);
+};
+
+List.prototype._render = function(){
     this.listItems = [];
     this.node.innerHTML = '';
 

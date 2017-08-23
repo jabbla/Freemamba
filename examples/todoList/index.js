@@ -1,10 +1,10 @@
 var MessageBus = Freemamba.MessageBus;
 var freemamba = Freemamba.Freemamba;
 
-var myWorker = new Worker('../../dist/Worker.js');
+//var myWorker = new Worker('../../dist/Worker.js');
 var tpl = document.getElementById('text').innerHTML;
 
-var myMsgBus = new MessageBus(myWorker);
+//var myMsgBus = new MessageBus(myWorker);
 
 var myList = new freemamba({
     template: tpl,
@@ -87,7 +87,8 @@ var myList = new freemamba({
     render: function(){
         var data = this.data;
 
-        this.replace([{name: '朱潇然'}]);
+        this.$list.today.replace([{name: '朱潇然'}]);
+        this.$render();
     }
 });
 
