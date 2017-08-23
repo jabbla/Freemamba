@@ -39,24 +39,20 @@ function text(ast){
 
 function expression(ast, context, listInfo){
     var text = '', getValue;
-    if(listInfo){
-        getValue = new Function('c','d','e','return ('+ast.body+')');
-        text = getValue(context, listInfo, '');
-    }else{
-        getValue = new Function('c','d','e','return ('+ast.body+')');
-        text = getValue(context, context.data, '');
-    }
+    
+    getValue = new Function('c', 'd', 'e', 'return (' + ast.body + ')');
+    text = getValue(context, listInfo || context.data, '');
 
     var node = document.createTextNode(text);
 
     return node;
 }
 
-function list(ast, context){
+function list(ast, context, listInfo){
     var listBody = ast.body;
     var node = document.createDocumentFragment();
     var getValue = new Function('c','d','e','return ('+ast.sequence.body+')');
-    var arrayData = getValue(context, context.data, '');
+    var arrayData = getValue(context, listInfo || context.data, '');
     var variable = ast.variable;
 
     for(var j=0;j<arrayData.length;j++){
@@ -75,8 +71,6 @@ function list(ast, context){
 
         return node;
     }
-    context._list.data = arrayData;
-    context._list.body = listBody;
     return node;
 }
 

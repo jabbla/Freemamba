@@ -1,13 +1,14 @@
 var MessageBus = Freemamba.MessageBus;
 var freemamba = Freemamba.Freemamba;
 
-//var myWorker = new Worker('../../dist/Worker.js');
+var myWorker = new Worker('../../dist/Worker.js');
 var tpl = document.getElementById('text').innerHTML;
 
-//var myMsgBus = new MessageBus(myWorker);
+var myMsgBus = new MessageBus(myWorker);
 
 var myList = new freemamba({
     template: tpl,
+    msgBus: myMsgBus,
     config: function(data){
         Object.assign(data, {
             tasks: [
@@ -16,7 +17,7 @@ var myList = new freemamba({
                 {name: '批量添加列表项（如果1.实现，是不是就没有必要）'}
             ],
             completed: [],
-            inputText: ''
+            inputText: '',
         });
     },
     onInput: function($event){
@@ -87,7 +88,7 @@ var myList = new freemamba({
     render: function(){
         var data = this.data;
 
-        this.$list.today.replace([{name: '朱潇然'}]);
+        //this.$list.today.replace([{name: '朱潇然'}]);
         this.$render();
     }
 });

@@ -7,11 +7,35 @@
 
 var MessageBus = require('./messageBus/WorkerMsgBus.js');
 var WKRenderStore = require('./store/WKRenderStore.js');
+var Differ = require('./vdom/Differ.js');
 
 var myMessageBus = new MessageBus();
 
-myMessageBus.buildReceiveDispatcher('render', function(data){
-    var store = new WKRenderStore(data);
+/**v-domStore */
+var VdomStore = {};
+
+/**状态枚举 */
+var INITIAL_RENDER = 'INITIAL_RENDER';
+var UPDATE_RENDER = 'UPDATE_RENDER';
+
+/**INITIAL_RENDER */
+myMessageBus.buildReceiveDispatcher(INITIAL_RENDER, function(data){
+    var data = data.data,
+        mambaID = data.mambaID,
+        store = new WKRenderStore(data);
     store.render();
-    this.receive({type: 'render', data: {html: store.renderedStr, events: store.events}});
+    VdomStore[mambaID] = store.vDom;
+    //store.render();
+    //this.receive({type: 'render', data: {html: store.renderedStr, events: store.events}});
 });
+
+/**UPDATE_RENDER */
+myMessageBus.buildReceiveDispatcher(UPDATE_RENDER, function(data){
+    var data = data.data,
+        mambaID = data.mambaID,
+        store = new WKRenderStore(data);
+    
+    store.render();
+    Diff(VdomStore[mambaID], store.vDom);
+});
+

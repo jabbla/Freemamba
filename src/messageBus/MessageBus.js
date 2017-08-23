@@ -40,9 +40,10 @@ MessageBus.prototype.addEvent = function (eventType, fn) {
 MessageBus.prototype._deserialize = function (message) {
     var type = message.data.type,
         data = message.data.data,
-        id = message.data.id;
+        id = message.data.id,
+        mambaID = message.data.mambaID;
 
-    return { id: id, type: type, data: data };
+    return { mambaID: mambaID , id: id, type: type, data: data };
 };
 
 MessageBus.prototype._serialize = function (message) {
@@ -52,6 +53,7 @@ MessageBus.prototype._serialize = function (message) {
     Info.id = _baseId;
     Info.type = message.type;
     Info.data = message.data;
+    Info.mambaID = message.mambaID;
 
     this._sendInfoToWorker(Info);
     this._baseId++;
@@ -73,9 +75,10 @@ MessageBus.prototype._postMessage = function () {
 
 MessageBus.prototype._checkWatchers = function (watchers, Info) {
 
-    for (var i = 0, watcher; i < watchers.length; i++) {
+    for (var i = watchers.length - 1, watcher; i >= 0; i--) {
         watcher = watchers[i];
         watcher(Info);
+        watchers.splice(i, 1);
     }
 };
 

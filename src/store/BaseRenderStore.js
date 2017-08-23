@@ -33,6 +33,7 @@ BaseRenderStore.prototype._configModel = function(model){
     this._list = {};
     this.$list = {};
     this.$refs = {};
+
     this._definer = model;
 };
 

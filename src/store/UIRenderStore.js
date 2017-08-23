@@ -9,51 +9,59 @@ var Extend = require('../utils/extend.js');
 var BaseRenderStore = require('./BaseRenderStore.js');
 var Compiler = require('../compiler/mainThread/compiler.js');
 
+/**状态枚举 */
+var INITIAL_RENDER = 'INITIAL_RENDER';
+var UPDATE_RENDER = 'UPDATE_RENDER';
+
 function Freemamba(config) {
     this.super(config);
     this._compiler = Compiler;
+    this._id = Freemamba.generateID();
+    this._renderState = INITIAL_RENDER;
 }
 
 Extend(Freemamba, BaseRenderStore);
 
 Freemamba.prototype.$inject = function (node) {
     this.containerNode = node;
-
     this.$render();
+    this._renderState = UPDATE_RENDER;
 };
 
-Freemamba.prototype.$render = function (workerRender) {
+Freemamba.prototype.$render = function () {
     var self = this;
     if(this._timer){
         clearTimeout(this._timer);
     }
-    this._timer = setTimeout(function(){
-        self._render(workerRender);
-    }, 0);
+    
+    self._render(self._renderState);
 };
 
-Freemamba.prototype._render = function(workerRender){
-    workerRender? this._renderAsync(workerRender) : this._renderSync();
+Freemamba.prototype._render = function(RENDER_STATE){
+    this._renderSync(RENDER_STATE);
 };
 
-Freemamba.prototype._renderSync = function () {
+Freemamba.prototype._renderSync = function (RENDER_STATE) {
     var newRoot = this.domTree = this._compile(this.AST),
         containerNode = this.containerNode,
         rootNode = this.rootNode;
 
     this.rootNode = newRoot.children[0];
     rootNode? containerNode.replaceChild(newRoot, rootNode) : containerNode.append(newRoot);
+
+    this.msgBus.receive({ mambaID: this._id, type: RENDER_STATE, data: { template: this.template, data: this.data }});
+    this.msgBus.onSend(function(Info){
+        console.log('UIbus已发送:', Info);
+    });
 };
 
-Freemamba.prototype._renderAsync = function (workerRender) {
-
-    workerRender.receive({ type: 'render', data: { template: this.template, data: this.data } })
-        .then(function (data) {
-            this.containerNode.innerHTML = data.html;
-            this.rootNode = this.containerNode.children[0];
-
-            Freemamba.addAsyncEvents.call(this, this.rootNode, data.events);
-        }.bind(this));
+/**生成组件实例的唯一id*/
+Freemamba.generateID = function(){
+    if(this.currentID){
+        return ++this.currentID;
+    }else{
+        return this.currentID = 1;
+    }
 };
 
 Freemamba.addAsyncEvents = function (node, events) {

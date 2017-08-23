@@ -33,9 +33,16 @@ WorkerMsgBus.prototype.buildReceiveDispatcher = function(type, fn){
 WorkerMsgBus.prototype._receiveBusResolver = function(Info){
     var type = Info.type,
         data = Info.data,
+        mambaID = Info.mambaID,
         dispatcher = this._receiveBusDispatcher;
 
-    dispatcher[type].call(this, data);
+    if(dispatcher[type]){
+        /**_vdomStore */
+        dispatcher[type].call(this, {data: data, mambaID: mambaID});
+    }else{
+        throw new Error('worker MessgaeBus haven\'t registered type: '+type);
+    }
+    
 }
 
 WorkerMsgBus.prototype.onReceiveMessage = function(fn){
