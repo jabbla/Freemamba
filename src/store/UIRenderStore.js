@@ -33,7 +33,6 @@ Freemamba.prototype.$render = function (workerRender) {
 };
 
 Freemamba.prototype._render = function(workerRender){
-    debugger;
     workerRender? this._renderAsync(workerRender) : this._renderSync();
 };
 
