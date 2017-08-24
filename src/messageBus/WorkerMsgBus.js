@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 19:50:27 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 13:11:05
+ * @Last Modified time: 2017-08-25 00:43:00
  */
 var MessageBus = require('./MessageBus.js');
 var Extend = require('../utils/extend.js');
@@ -30,15 +30,21 @@ WorkerMsgBus.prototype.buildReceiveDispatcher = function(type, fn){
     dispatcher[type] = fn;
 }
 
+WorkerMsgBus.prototype._serialize = function(message){
+    this._sendInfoToWorker(message);
+};
+
 WorkerMsgBus.prototype._receiveBusResolver = function(Info){
     var type = Info.type,
         data = Info.data,
         mambaID = Info.mambaID,
+        id = Info.id,
         dispatcher = this._receiveBusDispatcher;
 
     if(dispatcher[type]){
         /**_vdomStore */
-        dispatcher[type].call(this, {data: data, mambaID: mambaID});
+        debugger;
+        dispatcher[type].call(this, {data: data, mambaID: mambaID, id: id});
     }else{
         throw new Error('worker MessgaeBus haven\'t registered type: '+type);
     }

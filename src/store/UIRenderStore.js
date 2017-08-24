@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 19:48:21 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 22:07:20
+ * @Last Modified time: 2017-08-25 07:42:29
  */
 
 var Extend = require('../utils/extend.js');
@@ -49,9 +49,12 @@ Freemamba.prototype._renderSync = function (RENDER_STATE) {
     this.rootNode = newRoot.children[0];
     rootNode? containerNode.replaceChild(newRoot, rootNode) : containerNode.append(newRoot);
 
-    this.msgBus.receive({ mambaID: this._id, type: RENDER_STATE, data: { template: this.template, data: this.data }});
-    this.msgBus.onSend(function(Info){
-        console.log('UIbus已发送:', Info);
+    this.msgBus.receive({ mambaID: this._id, type: RENDER_STATE, data: { template: this.template, data: this.data }})
+        .then(function(){
+            //console.log(message);
+        });
+    this.msgBus.onSend(function(){
+        //console.log('UI 已发送：', message);
     });
 };
 

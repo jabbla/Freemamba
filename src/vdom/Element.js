@@ -16,7 +16,7 @@ Element.prototype.setAttribute = function(attrName, attrValue){
 };
 
 Element.prototype.addEventListener = function(eventName, handler, isPop, argContext){
-    this._events.push({name: eventName.replace(/-/, ''), value: handler, context: argContext});
+    this._events.push({name: eventName.replace(/-/, ''), value: handler+'', context: argContext});
 };
 
 Element.prototype.append = function(node){

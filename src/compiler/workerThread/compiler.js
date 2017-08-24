@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 17:12:36 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 13:34:07
+ * @Last Modified time: 2017-08-24 23:43:18
  */
 var attrResolver = require('./attrResolver.js');
 
@@ -26,6 +26,7 @@ function element(ast, context, listInfo, listBuffer, curIndex, rootPath){
     if(ast.children){
         for(var j=0;j<ast.children.length;j++){
             var child = ast.children[j];
+
             node.append(context._compile(child, listInfo, null, j, rootPath));
         }
     }

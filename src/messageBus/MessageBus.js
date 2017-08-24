@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 19:51:53 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 17:07:21
+ * @Last Modified time: 2017-08-25 07:41:12
  */
 function MessageBus() {
     this._onSendWorker = [];
@@ -46,18 +46,7 @@ MessageBus.prototype._deserialize = function (message) {
     return { mambaID: mambaID , id: id, type: type, data: data };
 };
 
-MessageBus.prototype._serialize = function (message) {
-    var Info = {},
-        _baseId = message.id = this._baseId;
-
-    Info.id = _baseId;
-    Info.type = message.type;
-    Info.data = message.data;
-    Info.mambaID = message.mambaID;
-
-    this._sendInfoToWorker(Info);
-    this._baseId++;
-    return this;
+MessageBus.prototype._serialize = function () {
 };
 
 MessageBus.prototype._sendInfoToWorker = function (Info) {
