@@ -22,8 +22,8 @@ Extend(RenderStore, BaseRenderStore);
 RenderStore.prototype.render = function () {
     this._compiler = Compiler;
     this._typedFlater = RenderStore.typedFlater;
-    this.vDom = this._compile(this.AST, this.data);
-    this.renderedStr = this.flatToString(this.vDom._children);
+    this.vDom = this._compile(this.AST, this.data, null, 0, '');
+    //this.renderedStr = this.flatToString(this.vDom._children);
 };
 
 RenderStore.prototype.flatToString = function (node) {

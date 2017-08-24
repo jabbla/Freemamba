@@ -88,7 +88,7 @@ var myList = new freemamba({
     render: function(){
         var data = this.data;
 
-        //this.$list.today.replace([{name: '朱潇然'}]);
+        this.$list.today.replace([{name: '朱潇然'}]);
         this.$render();
     }
 });

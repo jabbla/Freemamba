@@ -20,22 +20,28 @@ var UPDATE_RENDER = 'UPDATE_RENDER';
 
 /**INITIAL_RENDER */
 myMessageBus.buildReceiveDispatcher(INITIAL_RENDER, function(data){
-    var data = data.data,
-        mambaID = data.mambaID,
+    data = data.data;
+
+    var mambaID = data.mambaID,
         store = new WKRenderStore(data);
+
     store.render();
     VdomStore[mambaID] = store.vDom;
+    console.log(store.vDom);
     //store.render();
     //this.receive({type: 'render', data: {html: store.renderedStr, events: store.events}});
 });
 
 /**UPDATE_RENDER */
 myMessageBus.buildReceiveDispatcher(UPDATE_RENDER, function(data){
-    var data = data.data,
-        mambaID = data.mambaID,
+    data = data.data;
+
+    var mambaID = data.mambaID,
         store = new WKRenderStore(data);
-    
     store.render();
-    Diff(VdomStore[mambaID], store.vDom);
+    console.log(VdomStore[mambaID], store.vDom);
+    var differs = Differ(VdomStore[mambaID], store.vDom);
+    VdomStore[mambaID] = store.vDom;
+    console.log(differs);    
 });
 
