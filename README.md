@@ -43,28 +43,28 @@ this.$list.list1
 > 在index前插入列表项
 
 ```js
-this.$list.insert(index, item);
+this.$list.list1.insert(index, item);
 ```
 
 ### 修改
 > 修改指定index的列表项
 
 ```js
-this.$list.modify(index, item);
+this.$list.list1.modify(index, item);
 ```
 
 ### 删除
 > 删除指定index的列表项
 
 ```js
-this.$list.delete(index);
+this.$list.list1.delete(index);
 ```
 
 ### 替换
 > 替换整个列表数组
 
 ```js
-this.$list.replace(newArray)
+this.$list.list1.replace(newArray)
 ```
 
 ### 手动渲染
@@ -72,7 +72,7 @@ this.$list.replace(newArray)
 
 ```js
 this.$render()          //渲染整个组件
-this.$list.render()     //渲染列表实例
+this.$list.list1.render()     //渲染列表实例
 ```
 
 ## 例子
