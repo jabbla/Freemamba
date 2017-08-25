@@ -61,6 +61,7 @@ List.prototype.modify = function(index, model){
     this.data[index] = model;
 
     this.node.replaceChild(newChild, targetDom);
+    this.parent._updateWorkerDom();
 };
 
 List.prototype.delete = function(index){
@@ -76,7 +77,7 @@ List.prototype.replace = function(newListData){
 List.prototype.render = function(){
     var self = this;
     if(this._timer){
-        clearTimeout(this._timer)
+        clearTimeout(this._timer);
     }
     this._timer = setTimeout(function(){
         self._render();
@@ -89,6 +90,7 @@ List.prototype._render = function(){
 
     var newBody = this.parent._compile(this.ast.children, null, this);
     this.node.append(newBody);
+    this.parent._updateWorkerDom();
 };
 
 List.replaceList = function (oldList, newList) {

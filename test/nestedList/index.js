@@ -24,7 +24,8 @@ var myList = new freemamba({
                 {name: '实现RenderStore继承'},
                 {name: '完善工程目录'}
             ],
-            inputText: ''
+            inputText: '',
+            msgBus: myMsgBus
         });
     },
     onInput: function($event){

@@ -14,7 +14,9 @@
             <h2>Freemamba todoList</h2>
             <input type="text" value={inputText} on-input={this.onInput($event)}/> <button on-click={this.addTask($event)}>添加</button><button on-click={this.onReset($event)}>清空</button>
             <h2>Today</h2>
+            <h3 class={testClass} on-click={this.testClass($event)}>{title}</h3>
             <ul class="today-list" list="today">
+                {listTitle}
                 {#list tasks as task}
                     <li class="task">
                         <input type="checkbox" ref={'check'+task_index} on-click={this.toggleCheck(task_index, task)}/>

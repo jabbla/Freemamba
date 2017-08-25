@@ -2,7 +2,7 @@
  * @Author: zhuxiaoran 
  * @Date: 2017-08-19 19:51:53 
  * @Last Modified by: zhuxiaoran
- * @Last Modified time: 2017-08-20 17:07:21
+ * @Last Modified time: 2017-08-25 07:41:12
  */
 function MessageBus() {
     this._onSendWorker = [];
@@ -40,22 +40,13 @@ MessageBus.prototype.addEvent = function (eventType, fn) {
 MessageBus.prototype._deserialize = function (message) {
     var type = message.data.type,
         data = message.data.data,
-        id = message.data.id;
+        id = message.data.id,
+        mambaID = message.data.mambaID;
 
-    return { id: id, type: type, data: data };
+    return { mambaID: mambaID , id: id, type: type, data: data };
 };
 
-MessageBus.prototype._serialize = function (message) {
-    var Info = {},
-        _baseId = message.id = this._baseId;
-
-    Info.id = _baseId;
-    Info.type = message.type;
-    Info.data = message.data;
-
-    this._sendInfoToWorker(Info);
-    this._baseId++;
-    return this;
+MessageBus.prototype._serialize = function () {
 };
 
 MessageBus.prototype._sendInfoToWorker = function (Info) {
@@ -73,9 +64,10 @@ MessageBus.prototype._postMessage = function () {
 
 MessageBus.prototype._checkWatchers = function (watchers, Info) {
 
-    for (var i = 0, watcher; i < watchers.length; i++) {
+    for (var i = watchers.length - 1, watcher; i >= 0; i--) {
         watcher = watchers[i];
         watcher(Info);
+        watchers.splice(i, 1);
     }
 };
 
@@ -106,13 +98,13 @@ MessageBus.prototype._emit = function (id, eventName, data) {
     var _eventsStore = this._eventsStore;
 
     if (_eventsStore[id] && _eventsStore[id][eventName] && _eventsStore[id][eventName].watchers.length)
-        this._executeWatchers(_eventsStore[id][eventName].watchers, data);
+        this._executeWatchers(_eventsStore[id][eventName].watchers, eventName, data);
 };
 
-MessageBus.prototype._executeWatchers = function (watchers, data) {
+MessageBus.prototype._executeWatchers = function (watchers, eventName, data) {
     for (var i = watchers.length - 1, watcher; i >= 0; i--) {
         watcher = watchers[i];
-        watcher(data);
+        watcher(eventName, data);
         watchers.splice(i, 1);
     }
 };

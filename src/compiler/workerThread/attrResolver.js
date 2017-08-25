@@ -30,13 +30,12 @@ function resolveAttrValue(attr, node, context, listInfo){
         var eventName = attr.name.slice(3);
         attr.value.body = attr.value.body.replace(/'\$event'/g, '$event');
         var getHandler = new Function('c', 'd', 'e', 'return function($event){return '+attr.value.body+';}');
-        var argContext = listInfo || context.data;
 
-        node.addEventListener(eventName, getHandler(context, argContext, ''), false, argContext);
+        node.addEventListener(eventName, getHandler(context, listInfo || context.data, ''), false, listInfo || context.data);
         return '';
     }else{
         var getValue = new Function('c','d','e','return ('+attr.value.body+')');
-        return getValue(context, context.data, '');
+        return getValue(context, listInfo || context.data, '');
     }
 }
 

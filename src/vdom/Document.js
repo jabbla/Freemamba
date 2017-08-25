@@ -1,5 +1,6 @@
 var documentFragment = require('./DocumentFragment.js');
 var Element = require('./Element.js');
+var TextNode = require('./TextNode.js');
 
 var proto = {
     createDocumentFragment: function(){
@@ -9,7 +10,7 @@ var proto = {
         return new Element(tagName);
     },
     createTextNode: function(text){
-        return text;
+        return new TextNode(text);
     }
 };
 

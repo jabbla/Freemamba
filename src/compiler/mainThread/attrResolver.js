@@ -17,6 +17,7 @@ function resolveAttribute(attr, node, context, listInfo) {
     /**ref拦截 */
     if(attr.name === 'ref'){
         context.$refs[attrValue] = node;
+        node._refName = attrValue;
     }
 
     node.setAttribute(attr.name, attrValue);

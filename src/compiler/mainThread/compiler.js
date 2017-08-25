@@ -65,7 +65,6 @@ function list(ast, context, listInfo, listBuffer) {
         arrayData = getValue(context, listInfo || context.data, ''),
         variable = ast.variable;
 
-
     if(listBuffer){
         listBuffer.setData(arrayData);
         listBuffer.setParent(context);

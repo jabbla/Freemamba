@@ -1,22 +1,26 @@
 var MessageBus = Freemamba.MessageBus;
 var freemamba = Freemamba.Freemamba;
 
-//var myWorker = new Worker('../../dist/Worker.js');
+var myWorker = new Worker('../../dist/Worker.js');
 var tpl = document.getElementById('text').innerHTML;
 
-//var myMsgBus = new MessageBus(myWorker);
+var myMsgBus = new MessageBus(myWorker);
 
 var myList = new freemamba({
     template: tpl,
+    msgBus: myMsgBus,
     config: function(data){
         Object.assign(data, {
+            title: 'TEST',
+            testClass: 'yyy',
+            listTitle: 'listTitle',
             tasks: [
                 {name: '多次render合并'},
                 {name: 'diff探查，最小化更新'},
                 {name: '批量添加列表项（如果1.实现，是不是就没有必要）'}
             ],
             completed: [],
-            inputText: ''
+            inputText: '',
         });
     },
     onInput: function($event){
@@ -71,7 +75,7 @@ var myList = new freemamba({
     },
     onInfoEdit: function(e, task, taskIndex){
         task.name = e.target.value;
-        this.$list.today.modify(taskIndex, task);
+        //this.$list.today.modify(taskIndex, task);
     },
     disableInfo: function(index){
         var input = this.$refs['info'+index];
@@ -87,8 +91,12 @@ var myList = new freemamba({
     render: function(){
         var data = this.data;
 
-        this.$list.today.replace([{name: '朱潇然'}]);
+        data.tasks[0] = {name: 'zxr'};
+        data.tasks[1] = {name: 'zxr2'};
         this.$render();
+    },
+    testClass: function(e){
+        alert(this.data.testClass);
     }
 });
 

@@ -20,6 +20,20 @@ UIMsgBus.prototype._initWorker = function(){
     _worker.addEventListener('message', this._onMessage.bind(this));
 };
 
+UIMsgBus.prototype._serialize = function (message) {
+    var Info = {},
+        _baseId = message.id = this._baseId;
+
+    Info.id = _baseId;
+    Info.type = message.type;
+    Info.data = message.data;
+    Info.mambaID = message.mambaID;
+
+    this._sendInfoToWorker(Info);
+    this._baseId++;
+    return this;
+};
+
 UIMsgBus.prototype._postMessage = function(Info){
     var _worker = this._worker;
 

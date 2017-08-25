@@ -1,3 +1,5 @@
+var documentFragment = require('./DocumentFragment.js');
+
 function Element(tagName){
     this._tagName = tagName;
     this._attrs = [];
@@ -14,10 +16,16 @@ Element.prototype.setAttribute = function(attrName, attrValue){
 };
 
 Element.prototype.addEventListener = function(eventName, handler, isPop, argContext){
-    this._events.push({name: eventName.replace(/-/, ''), value: handler, context: argContext});
+    this._events.push({name: eventName.replace(/-/, ''), value: handler+'', context: argContext});
 };
 
 Element.prototype.append = function(node){
+    if(node instanceof documentFragment){
+        for(var i=0;i<node._children.length;i++){
+            this._children.push(node._children[i]);     
+        }
+        return;
+    }
     this._children.push(node);
 };
 
