@@ -43,7 +43,6 @@ WorkerMsgBus.prototype._receiveBusResolver = function(Info){
 
     if(dispatcher[type]){
         /**_vdomStore */
-        debugger;
         dispatcher[type].call(this, {data: data, mambaID: mambaID, id: id});
     }else{
         throw new Error('worker MessgaeBus haven\'t registered type: '+type);

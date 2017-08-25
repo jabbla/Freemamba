@@ -17,6 +17,7 @@ var VdomStore = {};
 /**状态枚举 */
 var INITIAL_RENDER = 'INITIAL_RENDER';
 var UPDATE_RENDER = 'UPDATE_RENDER';
+var DIFF_DETECT = 'DIFF_DETECT';
 
 /**INITIAL_RENDER */
 myMessageBus.buildReceiveDispatcher(INITIAL_RENDER, function(message){
@@ -26,6 +27,7 @@ myMessageBus.buildReceiveDispatcher(INITIAL_RENDER, function(message){
 
     store.render();
     VdomStore[mambaID] = store.vDom;
+    //console.log('Worker 收到', INITIAL_RENDER);
     //console.log(store.vDom);
 });
 
@@ -33,18 +35,27 @@ myMessageBus.buildReceiveDispatcher(INITIAL_RENDER, function(message){
 myMessageBus.buildReceiveDispatcher(UPDATE_RENDER, function(message){
     var data = message.data,
         mambaID = message.mambaID,
-        id = message.id,
         store = new WKRenderStore(data);
 
     store.render();
     //console.log('Worker 收到', UPDATE_RENDER);
-
-    var differs = Differ(VdomStore[mambaID], store.vDom);
     VdomStore[mambaID] = store.vDom;
-    
-    this.receive({ type: UPDATE_RENDER, data: differs, id: id });
 });
 
+/**DIFF_DETECT */
+myMessageBus.buildReceiveDispatcher(DIFF_DETECT, function(message){
+    var data = message.data,
+        mambaID = message.mambaID,
+        id = message.id,
+        store = new WKRenderStore(data);
+
+    store.render();
+    //console.log('Worker 收到', DIFF_DETECT);
+    //console.log(VdomStore[mambaID], store.vDom);
+    var differs = Differ(VdomStore[mambaID], store.vDom);
+    VdomStore[mambaID] = store.vDom;
+    this.receive({ type: DIFF_DETECT, data: differs, id: id });
+});
 /**消息Log */
 myMessageBus.onSend(function(){
     //console.log('Worker 已发送：', message);

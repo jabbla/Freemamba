@@ -1,5 +1,5 @@
 var diff = require('../utils/diff.js');
-
+var TextNode = require('./TextNode.js');
 //var COMPARE_FIELD = ['_attrs', '_events', '_tagName'];
 var ADD = 'ADD';
 var DELETE = 'DELETE';
@@ -11,18 +11,18 @@ function Differ(prevDom, curDom, result){
     }
     /**添加操作 */
     if(typeof prevDom === 'undefined' && typeof curDom === 'object'){
-        result.push({ type: ADD, path: prevDom._path , curDom: curDom, prevDom: prevDom });
+        result.push({ type: ADD, curDom: curDom, prevDom: prevDom });
         return;
     }
 
     /**删除操作 */
     if(typeof curDom === 'undefined' && typeof prevDom === 'object'){
-        result.push({ type: DELETE, path: prevDom._path , curDom: curDom, prevDom: prevDom });
+        result.push({ type: DELETE, curDom: curDom, prevDom: prevDom });
         return;
     }
 
     /**修改操作 */
-    var diffInfo = { type: REPLACE, path: curDom._path , curDom: curDom, prevDom: prevDom};
+    var diffInfo = { type: REPLACE, curDom: curDom, prevDom: prevDom};
 
     var prevTagName = prevDom._tagName,
         curTagName = curDom._tagName;
@@ -30,6 +30,14 @@ function Differ(prevDom, curDom, result){
     if(diff(prevTagName, curTagName)){
         result.push(diffInfo);
         return;
+    }
+
+    /**Text node */
+    if(prevDom instanceof TextNode){
+        if(prevDom._value !== curDom._value){
+            result.push(diffInfo);
+            return;
+        }
     }
 
     /**属性diff */
@@ -58,10 +66,27 @@ function Differ(prevDom, curDom, result){
     return;
 }
 
+function mergeDiff(diffs){
+    var listMap = {},
+        result = [];
+    for(var i=0;i<diffs.length;i++){
+        var listName = diffs[i].prevDom._listName || diffs[i].curDom._listName;
+        if(listName){
+            if(!listMap[listName]){
+                result.push(diffs[i]);
+                listMap[listName] = true;
+            }
+        }else{
+            result.push(diffs[i]);
+        }
+    }
+    return result;
+}
+
 function mainDiff(prevRoot, curRoot){
     var result = [];
     Differ(prevRoot._children[0], curRoot._children[0], result);
-    return result;
+    return mergeDiff(result);
 }
 
 module.exports = mainDiff;

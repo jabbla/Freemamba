@@ -98,13 +98,13 @@ MessageBus.prototype._emit = function (id, eventName, data) {
     var _eventsStore = this._eventsStore;
 
     if (_eventsStore[id] && _eventsStore[id][eventName] && _eventsStore[id][eventName].watchers.length)
-        this._executeWatchers(_eventsStore[id][eventName].watchers, data);
+        this._executeWatchers(_eventsStore[id][eventName].watchers, eventName, data);
 };
 
-MessageBus.prototype._executeWatchers = function (watchers, data) {
+MessageBus.prototype._executeWatchers = function (watchers, eventName, data) {
     for (var i = watchers.length - 1, watcher; i >= 0; i--) {
         watcher = watchers[i];
-        watcher(data);
+        watcher(eventName, data);
         watchers.splice(i, 1);
     }
 };
