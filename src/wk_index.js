@@ -50,9 +50,10 @@ myMessageBus.buildReceiveDispatcher(DIFF_DETECT, function(message){
         store = new WKRenderStore(data);
 
     store.render();
-    //console.log('Worker 收到', DIFF_DETECT);
-    //console.log(VdomStore[mambaID], store.vDom);
+    console.log('Worker 收到', DIFF_DETECT);
+    console.log(VdomStore[mambaID], store.vDom);
     var differs = Differ(VdomStore[mambaID], store.vDom);
+    console.log(differs);
     VdomStore[mambaID] = store.vDom;
     this.receive({ type: DIFF_DETECT, data: differs, id: id });
 });

@@ -40,8 +40,9 @@ Freemamba.prototype.$render = function () {
     if(this._timer){
         clearTimeout(this._timer);
     }
-    
+    console.log(this.AST);
     self._render(self._renderState);
+    console.log(this.domTree);
 };
 
 Freemamba.prototype._render = function(RENDER_STATE){
@@ -154,6 +155,7 @@ Freemamba.prototype._replaceOperate = function(prevDom, curDom){
 
     /**替换操作 */
     source = new VdomCompiler(curDom, this).compile(targetDom, REPLACE);
+    console.log(source, targetDom);
     source && targetDom.parentNode.replaceChild(source, targetDom);
 
 };

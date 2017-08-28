@@ -14,8 +14,11 @@
             <h2>Freemamba todoList</h2>
             <input type="text" value={inputText} on-input={this.onInput($event)}/> <button on-click={this.addTask($event)}>添加</button><button on-click={this.onReset($event)}>清空</button>
             <h2>Today</h2>
+            {#if condition}
+                <h3>{condition}</h3>
+            {/if}
             <h3 class={testClass} on-click={this.testClass($event)}>{title}</h3>
-            <ul class="today-list" list="today">
+            <!--<ul class="today-list" list="today">
                 {listTitle}
                 {#list tasks as task}
                     <li class="task">
@@ -26,14 +29,14 @@
                         <button on-click={this.editTask(task_index)}>编辑</button>
                     </li>
                 {/list}
-            </ul>
+            </ul>-->
             <button on-click={this.batchComplete()}>批量完成</button>
             <h2>Completed</h2>
-            <ul class="today-list" list="completed">
+            <!--<ul class="today-list" list="completed">
                 {#list completed as task}
                     <li class="task">{task.name} <span>完成</span></li>
                 {/list}
-            </ul>
+            </ul>-->
             <button on-click={this.render($event)}>组件渲染</button>
         </div>
     </script>

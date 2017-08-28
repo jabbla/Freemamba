@@ -28,13 +28,14 @@ function Differ(prevDom, curDom, result){
         curTagName = curDom._tagName;
     
     if(diff(prevTagName, curTagName)){
+        console.log(diffInfo);
         result.push(diffInfo);
         return;
     }
 
     /**Text node */
     if(prevDom instanceof TextNode){
-        if(prevDom._value !== curDom._value){
+        if(prevDom._value.trim() !== curDom._value.trim()){
             result.push(diffInfo);
             return;
         }
@@ -70,8 +71,9 @@ function mergeDiff(diffs){
     var listMap = {},
         result = [];
     for(var i=0;i<diffs.length;i++){
-        var listName = diffs[i].prevDom._listName || diffs[i].curDom._listName;
-        if(listName){
+        var listName = diffs[i].prevDom._listName || diffs[i].curDom._listName,
+            isContainer = diffs[i].prevDom._container || diffs[i].curDom._container;
+        if(listName && !isContainer){
             if(!listMap[listName]){
                 result.push(diffs[i]);
                 listMap[listName] = true;

@@ -91,8 +91,7 @@ var myList = new freemamba({
     render: function(){
         var data = this.data;
 
-        data.tasks[0] = {name: 'zxr'};
-        data.tasks[1] = {name: 'zxr2'};
+        data.condition = 'condition';
         this.$render();
     },
     testClass: function(e){

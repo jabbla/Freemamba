@@ -30,7 +30,7 @@ function element(ast, context, listInfo) {
         for (var j = 0; j < ast.children.length; j++) {
             var child = ast.children[j];
 
-            var childDom = context._compile(child, listInfo, listBuffer);
+            var childDom = context._compile(child, listInfo || context.data, listBuffer);
 
             if(child.type === 'list'){
                 listBuffer.setAst(ast);
@@ -98,9 +98,23 @@ function list(ast, context, listInfo, listBuffer) {
     return node;
 }
 
+function condition(ast, context, listInfo, listBuffer){
+    var test = ast.test, node = document.createDocumentFragment();
+    var getValue = new Function('c', 'd', 'e', 'return (' + test.body + ')');
+    var consequent = ast.consequent;
+
+    if(getValue(context, listInfo || context.data, '')){
+        for(var i=0;i<consequent.length;i++){
+            node.append(context._compile(consequent[i], listInfo || context.data, listBuffer));
+        }
+    }
+    return node;
+}
+
 module.exports = {
     'element': element,
     'text': text,
     'expression': expression,
-    'list': list
+    'list': list,
+    'if': condition
 };

@@ -33,7 +33,8 @@ function element(ast, context, listInfo, listBuffer, curIndex, rootPath, listNam
             var child = ast.children[j],
                 childNode = context._compile(child, listInfo, null, nextIndex, rootPath, node._listName || listName);
             
-            if(child.type === 'list'){
+            if(child.type === 'list' || child.type === 'if'){
+                node._container = 'true';
                 nextIndex += (childNode._length-1);
             }
             node.append(childNode);
@@ -102,10 +103,29 @@ function list(ast, context, listInfo, listBuffer, curIndex, rootPath, listName){
     return node;
 }
 
+function condition(ast, context, listInfo, listBuffer, curIndex, rootPath, listName){
+    var test = ast.test, node = document.createDocumentFragment();
+    var getValue = new Function('c', 'd', 'e', 'return (' + test.body + ')');
+    var consequent = ast.consequent, length;
+
+    if(getValue(context, listInfo || context.data, '')){
+        for(var i=0;i<consequent.length;i++){
+            var itemIndex = curIndex + i;
+            node.append(context._compile(consequent[i], listInfo || context.data, listBuffer, itemIndex, rootPath, listName));
+        }
+        length = consequent.length;
+    }else{
+        length = 0;
+    }
+    node._length = length;
+
+    return node;
+}
 
 module.exports = {
     'element': element,
     'text': text,
     'expression': expression,
-    'list': list
+    'list': list,
+    'if': condition
 };

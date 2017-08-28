@@ -75,13 +75,7 @@ List.prototype.replace = function(newListData){
 };
 
 List.prototype.render = function(){
-    var self = this;
-    if(this._timer){
-        clearTimeout(this._timer);
-    }
-    this._timer = setTimeout(function(){
-        self._render();
-    }, 0);
+    this._render();
 };
 
 List.prototype._render = function(){

@@ -32,10 +32,12 @@ vdomCompiler.prototype._TextNode = function(vdom){
 vdomCompiler.prototype._Element = function(vdom, targetDom, type){
     var context = this._context;
 
-    if(vdom._listName){
+    if(vdom._listName && !vdom._container){
         context.$list[vdom._listName].render();
+
         return;
     }
+
     var node = document.createElement(vdom._tagName);
 
     /**设置属性 */
