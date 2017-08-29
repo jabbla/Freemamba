@@ -76,6 +76,8 @@ Freemamba.prototype._diff = function(diffs){
         switch(oprateType){
             case 'REPLACE':
                 this._replaceOperate(prevDom, curDom); break;
+            case 'ADD':
+                this._addOperate(prevDom, curDom); break;
             case 'DELETE':
                 this._deleteOperate(prevDom); break;
             default:
@@ -97,7 +99,7 @@ Freemamba.prototype._addOperate = function(prevDom, curDom){
 
     /**寻找父节点&&生成新节点 */
     targetDom = this._findTargetDom(rootNode, path, true);
-    source = new VdomCompiler(curDom, this).compile(null, ADD);
+    source = new VdomCompiler(curDom, this).compile();
 
     /**插入操作 */
     lastIndex = targetDom._lastIndex;
@@ -120,7 +122,7 @@ Freemamba.prototype._deleteOperate = function(prevDom){
     }
 
     targetDom = this._findTargetDom(rootNode, path);
-    targetDom.parentNode.remove(targetDom);
+    targetDom.parentNode.removeChild(targetDom);
 };
 
 Freemamba.prototype._findTargetDom = function(root, path, isAdd){
@@ -154,8 +156,7 @@ Freemamba.prototype._replaceOperate = function(prevDom, curDom){
     targetDom = this._findTargetDom(rootNode, path);
 
     /**替换操作 */
-    source = new VdomCompiler(curDom, this).compile(targetDom, REPLACE);
-    console.log(source, targetDom);
+    source = new VdomCompiler(curDom, this).compile();
     source && targetDom.parentNode.replaceChild(source, targetDom);
 
 };

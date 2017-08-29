@@ -1,14 +1,13 @@
-
+var List = require('../list/List.js');
 
 function vdomCompiler(vdom, context){
     this._vdom = vdom;
     this._context = context;
 }
 
-vdomCompiler.prototype.compile = function(targetDom, type){
-    var vdom = this._vdom;
-    
-    return this['_'+this._typeof(vdom)](vdom, targetDom, type);
+vdomCompiler.prototype.compile = function(vdom){
+    vdom = vdom || this._vdom;
+    return this['_'+this._typeof(vdom)](vdom);
 };
 
 vdomCompiler.prototype._typeof = function(vdom){
@@ -29,19 +28,44 @@ vdomCompiler.prototype._TextNode = function(vdom){
     return document.createTextNode(vdom._value);
 };
 
-vdomCompiler.prototype._Element = function(vdom, targetDom, type){
+vdomCompiler.prototype._Element = function(vdom, listInfo){
     var context = this._context;
+    var self = this;
+    /**处理List */
+    if(vdom._container){
+        var listNode;
+        if(context.$list[vdom._listName]){
+            listNode = context.$list[vdom._listName].node;
+        }else{
+            listNode = document.createElement(vdom._tagName);
+            console.log(vdom);
+            var getListData = new Function('c','d','e','return ('+vdom._getListData+')');
+            var arrayData = getListData(context, context.data, '');
+            var ListComponent = new List({
+                node: listNode,
+                data: arrayData,
+                parent: context
+            });
+            ListComponent.setAst(vdom._ast);
 
-    if(vdom._listName && !vdom._container){
-        context.$list[vdom._listName].render();
+            vdom._children.forEach(function(item){
+                var child = self.compile(item, arrayData);
+                ListComponent.addListItem(child);
+                listNode.append(child);
+            });
 
-        return;
+            context.$list[vdom._listName] = ListComponent;
+        }
+        return listNode;
     }
 
     var node = document.createElement(vdom._tagName);
 
     /**设置属性 */
     for(var i=0;i<vdom._attrs.length;i++){
+        if(vdom._attrs[i].name === 'ref'){
+            context.$refs[vdom._attrs[i].value] = node;
+        }
         node.setAttribute(vdom._attrs[i].name, vdom._attrs[i].value);
     }
 
@@ -49,37 +73,34 @@ vdomCompiler.prototype._Element = function(vdom, targetDom, type){
     for(var j=0;j<vdom._events.length;j++){
         var handlerStr = vdom._events[j].value;
         var handler = new Function('c', 'd', 'e', 'return ' + handlerStr + ';');
-        node.addEventListener(vdom._events[j].name, handler(context, context.data, ''), false);
+        node.addEventListener(vdom._events[j].name, handler(context, listInfo || context.data, ''), false);
     }
 
-    /**替换子节点 */
-    if(type === 'REPLACE'){
-        var children = document.createDocumentFragment();
-        for(var k=0;k<targetDom.childNodes.length;k++){ 
-            children.append(targetDom.childNodes[k]);
-        }
-        node.append(children);
+    /**生成子节点 */
+    var children = document.createDocumentFragment();
+    for(var k=0;k<vdom._children.length;k++){ 
+        children.append(this.compile(vdom._children[k]));
     }
-    
-
-    /**绑定ref */
-    if(targetDom && targetDom._refName){
-        context.$refs[targetDom._refName] = node;
-    }
-
-    if(type === 'ADD'){
-        var childBody = document.createDocumentFragment();
-        for(var h=0;h<vdom._children.length;h++){
-            childBody.append(new vdomCompiler(vdom._children[h]).compile(null, 'ADD'));
-        }
-        node.append(childBody);
-    }
+    node.append(children);
 
     return node;
 };
 
-vdomCompiler.prototype._DocumentFragment = function(){
-    
+vdomCompiler.prototype._DocumentFragment = function(vdom){
+    var node = document.createDocumentFragment();
+    var self = this;
+
+    if(vdom._ast && vdom._ast.type === 'list'){
+        console.log(vdom._ast);
+    }
+    vdom._children.forEach(function(item){
+        node.append(self.compile(item));
+    });
+    return node;
+};
+
+vdomCompiler.prototype._ListElement = function(vdom){
+
 };
 
 module.exports = vdomCompiler;

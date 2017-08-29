@@ -34,9 +34,15 @@ function element(ast, context, listInfo, listBuffer, curIndex, rootPath, listNam
                 childNode = context._compile(child, listInfo, null, nextIndex, rootPath, node._listName || listName);
             
             if(child.type === 'list' || child.type === 'if'){
-                node._container = 'true';
                 nextIndex += (childNode._length-1);
             }
+
+            if(child.type === 'list'){
+                node._container = 'true';
+                node._getListData = child.sequence.body;
+                node._ast = ast;
+            }
+
             node.append(childNode);
         }
     }

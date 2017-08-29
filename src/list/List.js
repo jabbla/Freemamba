@@ -23,6 +23,7 @@ List.prototype.setData = function(array){
 };
 
 List.prototype.setAst = function(ast){
+    console.log(ast);
     this.ast = ast;
 };
 

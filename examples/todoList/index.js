@@ -13,6 +13,8 @@ var myList = new freemamba({
         Object.assign(data, {
             title: 'TEST',
             testClass: 'yyy',
+            condition: 'condition',
+            showList: false,
             listTitle: 'listTitle',
             tasks: [
                 {name: '多次render合并'},
@@ -33,7 +35,10 @@ var myList = new freemamba({
 
         item.checked = !item.checked
         checkBox.checked = item.checked;
-
+    },
+    showList: function(e){
+        this.data.showList = true;
+        this.$render();
     },
     completeTask: function(index, item){
         var data = this.data,
@@ -91,10 +96,12 @@ var myList = new freemamba({
     render: function(){
         var data = this.data;
 
-        data.condition = 'condition';
+        data.condition = '';
         this.$render();
     },
     testClass: function(e){
+        console.log(this.$refs.test);
+
         alert(this.data.testClass);
     }
 });
