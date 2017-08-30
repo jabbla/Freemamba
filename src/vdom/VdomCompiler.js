@@ -5,9 +5,9 @@ function vdomCompiler(vdom, context){
     this._context = context;
 }
 
-vdomCompiler.prototype.compile = function(vdom){
+vdomCompiler.prototype.compile = function(vdom, listInfo){
     vdom = vdom || this._vdom;
-    return this['_'+this._typeof(vdom)](vdom);
+    return this['_'+this._typeof(vdom)](vdom, listInfo);
 };
 
 vdomCompiler.prototype._typeof = function(vdom){
@@ -38,7 +38,7 @@ vdomCompiler.prototype._Element = function(vdom, listInfo){
             listNode = context.$list[vdom._listName].node;
         }else{
             listNode = document.createElement(vdom._tagName);
-            console.log(vdom);
+            console.log(vdom._variable);
             var getListData = new Function('c','d','e','return ('+vdom._getListData+')');
             var arrayData = getListData(context, context.data, '');
             var ListComponent = new List({
@@ -49,7 +49,14 @@ vdomCompiler.prototype._Element = function(vdom, listInfo){
             ListComponent.setAst(vdom._ast);
 
             vdom._children.forEach(function(item){
-                var child = self.compile(item, arrayData);
+                if(item._isListBody){
+                    var childInfo = {};
+                    childInfo[vdom._variable] = arrayData[item._listIndex];
+                    childInfo[vdom._variable+'_index'] = item._listIndex;
+                }
+
+                var child = self.compile(item, childInfo || context.data);
+
                 ListComponent.addListItem(child);
                 listNode.append(child);
             });
@@ -86,15 +93,16 @@ vdomCompiler.prototype._Element = function(vdom, listInfo){
     return node;
 };
 
-vdomCompiler.prototype._DocumentFragment = function(vdom){
+vdomCompiler.prototype._DocumentFragment = function(vdom, listInfo){
     var node = document.createDocumentFragment();
     var self = this;
 
     if(vdom._ast && vdom._ast.type === 'list'){
         console.log(vdom._ast);
     }
+    debugger;
     vdom._children.forEach(function(item){
-        node.append(self.compile(item));
+        node.append(self.compile(item, listInfo));
     });
     return node;
 };

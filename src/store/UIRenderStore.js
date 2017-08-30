@@ -88,14 +88,8 @@ Freemamba.prototype._diff = function(diffs){
 
 Freemamba.prototype._addOperate = function(prevDom, curDom){
     var targetDom, path = curDom._path,
-        listName = curDom._listName,
         rootNode = this.rootNode,
         source, lastIndex;
-
-    if(listName){
-        this.$list[listName].render();
-        return;
-    }
 
     /**寻找父节点&&生成新节点 */
     targetDom = this._findTargetDom(rootNode, path, true);

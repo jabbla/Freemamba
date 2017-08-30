@@ -41,6 +41,7 @@ function element(ast, context, listInfo, listBuffer, curIndex, rootPath, listNam
                 node._container = 'true';
                 node._getListData = child.sequence.body;
                 node._ast = ast;
+                node._variable = child.variable;
             }
 
             node.append(childNode);
@@ -102,10 +103,12 @@ function list(ast, context, listInfo, listBuffer, curIndex, rootPath, listName){
         }
 
         if(listName) node._listName = listName;
+
         return node;
     }
     if(listName) node._listName = listName;
 
+    node._isListBody = true;
     return node;
 }
 
